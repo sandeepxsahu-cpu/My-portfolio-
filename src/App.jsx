@@ -523,7 +523,7 @@ const Hero = ({ onScrollTo }) => {
     return () => window.removeEventListener("mousemove", fn);
   }, [isMobile]);
 
-  const THUMB_W = isTablet ? 180 : 224;
+  const THUMB_W = isTablet ? 220 : 290;
 
   const leftThumbs = [
     { bg1: "#0d0b2b", bg2: "#3d2fa0", text: "10 MONEY MISTAKES", accent: "#ffd700" },
@@ -569,7 +569,7 @@ const Hero = ({ onScrollTo }) => {
             flexDirection: "column",
             gap: 14,
             padding: "0 0 0 3vw",
-            transform: `perspective(1400px) rotateY(${26 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
+            transform: `perspective(1900px) rotateY(${35 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
             transition: "transform 0.15s ease-out",
             maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
@@ -625,7 +625,7 @@ const Hero = ({ onScrollTo }) => {
             fontSize: "clamp(34px, 4vw, 66px)",
             fontWeight: 900,
             lineHeight: 1.04,
-            letterSpacing: "-2px",
+            letterSpacing: "-0.04em",
             marginBottom: 32,
             whiteSpace: isMobile ? "normal" : "nowrap",
           }}
@@ -664,7 +664,7 @@ const Hero = ({ onScrollTo }) => {
             flexDirection: "column",
             gap: 14,
             padding: "0 3vw 0 0",
-            transform: `perspective(1400px) rotateY(${-26 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
+            transform: `perspective(1900px) rotateY(${-35 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
             transition: "transform 0.15s ease-out",
             maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
@@ -724,16 +724,17 @@ const Intro = () => {
               position: "relative",
               display: "grid",
               gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
-              marginBottom: 72,
+              maxWidth: 1100,
+              margin: "0 auto 72px",
               borderRadius: 20,
               overflow: "hidden",
-              background: "linear-gradient(180deg, rgba(59,130,246,0.95) 0%, rgba(37,99,235,0.88) 100%)",
-              border: "1px solid rgba(255,255,255,0.12)",
+              background: "linear-gradient(180deg, rgba(59,130,246,0.92) 0%, rgba(37,99,235,0.88) 100%)",
+              border: "1px solid rgba(255,255,255,0.08)",
               boxShadow: statsHover
                 ? "0 24px 60px rgba(37,99,235,0.18)"
                 : "0 20px 50px rgba(37,99,235,0.22)",
-              backdropFilter: "blur(16px)",
-              WebkitBackdropFilter: "blur(16px)",
+              backdropFilter: "blur(14px)",
+              WebkitBackdropFilter: "blur(14px)",
               opacity: 0.92,
               transform: statsHover ? "translateY(-3px)" : "translateY(0)",
               transition: "transform 0.35s cubic-bezier(.22,.61,.36,1), box-shadow 0.35s cubic-bezier(.22,.61,.36,1), border-color 0.35s cubic-bezier(.22,.61,.36,1)",
@@ -751,8 +752,8 @@ const Intro = () => {
                   zIndex: 1,
                   textAlign: "center",
                   padding: "34px 20px",
-                  borderRight: !isMobile && i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
-                  borderBottom: isMobile && i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                  borderRight: !isMobile && i < 2 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                  borderBottom: isMobile && i < 2 ? "1px solid rgba(255,255,255,0.06)" : "none",
                   background: "rgba(255,255,255,0.015)",
                 }}
               >
@@ -1158,10 +1159,9 @@ const About = () => {
    TESTIMONIALS DATA
 ───────────────────────────── */
 const testimonials = [
-  { name: "Marcus Webb", handle: "@marcuswebb", subs: "1.2M subs", text: "My CTR went from 2.1% to 7.8% in 3 weeks. The thumbnails don't just look good — they're engineered to get clicked. Best investment I made for my channel.", color: "#2563eb" },
-  { name: "Priya Sharma", handle: "@priyacreates", subs: "680K subs", text: "I was skeptical about investing in thumbnail design, but the data doesn't lie. Each redesign came with a clear strategy and the results were immediate.", color: "#7c3aed" },
-  { name: "Rahul Mehta", handle: "@rahultech", subs: "2.3M subs", text: "Working with VisualDives changed how I think about thumbnails entirely. They understand what makes people click — not just what looks pretty.", color: "#059669" },
-  { name: "Ananya Kapoor", handle: "@ananyavlogs", subs: "890K subs", text: "Three of my videos went viral in one month after the thumbnail redesign. The before/after is night and day. Absolutely insane results.", color: "#dc2626" },
+  { name: "Drew Blackston", handle: "@Drew Blackston", subs: "36.2K subs", text: "My CTR went from 2.1% to 7.8% in 3 weeks. The thumbnails don't just look good — they're engineered to get clicked. Best investment I made for my channel.", color: "#2563eb" },
+  { name: "Abraham", handle: "@AbrahamThePharmacist", subs: "851K subs", text: "I was skeptical about investing in thumbnail design, but the data doesn't lie. Each redesign came with a clear strategy and the results were immediate.", color: "#7c3aed" },
+  { name: "Shishir Wadhvan", handle: "@ShishirWadhvan", subs: "", text: "Working with VisualDives changed how I think about thumbnails entirely. They understand what makes people click — not just what looks pretty.", color: "#059669" },
 ];
 
 const Testimonials = () => {
@@ -1195,7 +1195,7 @@ const Testimonials = () => {
                   <div>
                     <div style={{ fontWeight: 800, fontSize: 15 }}>{t.name}</div>
                     <div style={{ fontSize: 12, color: "rgba(255,255,255,0.28)", marginTop: 3 }}>
-                      {t.handle} · {t.subs}
+                      {t.handle}{t.subs ? ` · ${t.subs}` : ""}
                     </div>
                   </div>
                 </div>
@@ -1212,11 +1212,12 @@ const Testimonials = () => {
    FAQ
 ───────────────────────────── */
 const faqs = [
-  ["Do you guarantee a high CTR?", "I can't guarantee YouTube's algorithm, but I guarantee designs built on proven click psychology. Most clients see meaningful CTR improvements within the first week."],
+  ["Do you guarantee a high CTR?", "No one can. But I give your content the best shot with strong ideas and high-performing design."],
   ["What's your typical turnaround time?", "Standard delivery is 48 hours. For bulk orders or rush projects, reach out and we'll work something out."],
   ["How many revisions do I get?", "Every project includes 2 rounds of revisions. The brief process ensures we're aligned from the start."],
   ["Do you help with strategy too?", "Yes! Ideation, title suggestions, and hook feedback are baked into every project."],
-  ["Can I get the source PSD file?", "Source files are available as an add-on. Most clients only need the final exported PNG/JPG."],
+  ["What makes your thumbnails different?", "I design for clicks, not just looks. Every thumbnail is rooted in strategy and audience psychology."],
+  ["Can I get the source PSD file?", "Yes, on request for an extra charge. Files are clean and organized."],
 ];
 
 const FAQ = () => {
@@ -1321,11 +1322,10 @@ export default function App() {
             alignItems: "center",
             justifyContent: "space-between",
             gap: 16,
-            background: navScrolled ? "rgba(10,14,22,0.68)" : "rgba(10,14,22,0.20)",
-            backdropFilter: navScrolled ? "blur(24px)" : "blur(14px)",
+            background: navScrolled ? "rgba(10,14,22,0.78)" : "rgba(10,14,22,0.20)",
+            backdropFilter: navScrolled ? "blur(18px)" : "blur(14px)",
             borderBottom: navScrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(255,255,255,0.03)",
-            boxShadow: navScrolled ? "0 8px 24px rgba(0,0,0,0.20)" : "none",
-          transition: "all 0.35s cubic-bezier(.22,.61,.36,1)",
+            transition: "all 0.35s cubic-bezier(.22,.61,.36,1)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
@@ -1378,6 +1378,52 @@ export default function App() {
         <FAQ />
         <CTA />
 
+        <section
+          style={{
+            padding: "0 8% 60px",
+            display: "flex",
+            justifyContent: "center",
+            gap: 18,
+            flexWrap: "wrap",
+          }}
+        >
+          {[
+            { label: "Instagram", url: "https://www.instagram.com/visualdives7/?hl=en" },
+            { label: "LinkedIn", url: "https://www.linkedin.com/in/design-by-san-%F0%9F%8E%A8-3a9b44320/" },
+            { label: "X", url: "https://x.com/VisualDives" },
+          ].map((item) => (
+            <a
+              key={item.label}
+              href={item.url}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                textDecoration: "none",
+                color: "#fff",
+                fontSize: 13,
+                fontWeight: 500,
+                padding: "12px 22px",
+                borderRadius: 999,
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                transition: "transform .35s cubic-bezier(.22,.61,.36,1), background .35s ease, box-shadow .35s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-3px)";
+                e.currentTarget.style.background = "rgba(37,99,235,0.12)";
+                e.currentTarget.style.boxShadow = "0 10px 25px rgba(37,99,235,0.18)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              {item.label}
+            </a>
+          ))}
+        </section>
+
         <footer
           style={{
             borderTop: `1px solid ${theme.line}`,
@@ -1391,13 +1437,13 @@ export default function App() {
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 26, height: 26, borderRadius: 6, background: "linear-gradient(135deg,#2563eb,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 900 }}>
-              CC
+              VD
             </div>
-            <span style={{ fontWeight: 900, fontSize: 12, letterSpacing: 1.5, textTransform: "uppercase" }}>ClickCraft</span>
+            <span style={{ fontWeight: 900, fontSize: 12, letterSpacing: 1.5, textTransform: "uppercase" }}>VisualDives</span>
           </div>
-          <div style={{ color: "rgba(255,255,255,0.18)", fontSize: 12 }}>© 2025 ClickCraft Studio · All rights reserved.</div>
-          <a href="mailto:workwithme@clickcraft.studio" style={{ color: "rgba(255,255,255,0.28)", fontSize: 12, textDecoration: "none" }}>
-            workwithme@clickcraft.studio
+          <div style={{ color: "rgba(255,255,255,0.18)", fontSize: 12 }}>© 2025 VisualDives · All rights reserved.</div>
+          <a href="mailto:Sandeepxsahu@gmail.com" style={{ color: "rgba(255,255,255,0.28)", fontSize: 12, textDecoration: "none" }}>
+            Sandeepxsahu@gmail.com
           </a>
         </footer>
       </div>
