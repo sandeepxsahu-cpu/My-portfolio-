@@ -866,7 +866,7 @@ const FeaturedWork = () => {
         </Reveal>
 
         {workData.map((w, i) => (
-          <div key={w.title} style={{ position: "sticky", top: isMobile ? 68 + i * 10 : 72 + i * 18, zIndex: i + 1, marginBottom: i < workData.length - 1 ? 72 : 96 }}>
+          <div key={w.title} style={{ position: "sticky", top: isMobile ? 68 + i * 10 : 170 + i * 30, zIndex: i + 1, marginBottom: i < workData.length - 1 ? 72 : 96 }}>
             <div style={{ background: theme.surface, border: `1px solid ${theme.line}`, borderRadius: 20, overflow: "hidden", boxShadow: "0 24px 60px rgba(0,0,0,0.68)" }}>
               <Slider before={<DullThumb text={w.dull} />} after={<VividThumb bg1={w.b1} bg2={w.b2} text={w.text} accent={w.accent} />} />
               <div style={{ padding: isMobile ? "18px 18px 20px" : "18px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
@@ -1055,7 +1055,7 @@ const MyServices = () => {
         </Reveal>
 
         {services.map((s, i) => (
-          <div key={s.num} style={{ position: "sticky", top: isMobile ? 68 + i * 12 : 72 + i * 24, zIndex: i + 1, marginBottom: i < services.length - 1 ? 72 : 96 }}>
+          <div key={s.num} style={{ position: "sticky", top: isMobile ? 68 + i * 12 : 170 + i * 30, zIndex: i + 1, marginBottom: i < services.length - 1 ? 72 : 96 }}>
             <div
               style={{
                 background: s.bg,
@@ -1186,7 +1186,7 @@ const Testimonials = () => {
         <div style={{ position: "relative" }}>
           <div style={{ position: "absolute", left: 20, top: 0, bottom: 0, width: 1, background: "linear-gradient(to bottom,transparent,rgba(59,130,246,0.25),transparent)" }} />
           {testimonials.map((t, i) => (
-            <div key={t.name} style={{ position: "sticky", top: isMobile ? 68 + i * 16 : 72 + i * 24, zIndex: i + 1, marginBottom: i < testimonials.length - 1 ? 72 : 0 }}>
+            <div key={t.name} style={{ position: "sticky", top: isMobile ? 68 + i * 16 : 170 + i * 30, zIndex: i + 1, marginBottom: i < testimonials.length - 1 ? 72 : 0 }}>
               <div style={{ background: "#0d1017", border: `1px solid ${theme.line}`, borderRadius: 20, padding: isMobile ? "30px 24px 30px 50px" : "36px 44px 36px 60px", boxShadow: "0 24px 60px rgba(0,0,0,0.65)", position: "relative" }}>
                 <div style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", width: 9, height: 9, borderRadius: "50%", background: t.color, boxShadow: `0 0 16px ${t.color}` }} />
                 <div style={{ display: "flex", gap: 2, marginBottom: 16 }}>{Array(5).fill(0).map((_, j) => <span key={j} style={{ color: "#fbbf24", fontSize: 13 }}>★</span>)}</div>
@@ -1281,9 +1281,9 @@ const CTA = () => {
           </span>
         </h2>
         <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 17, marginBottom: 44 }}>Every click counts. Let's make yours.</p>
-        <GhostButton href="mailto:visualdives7@gmail.com">Work With Me →</GhostButton>
+        <GhostButton href="mailto:sandeepxsahu@gmail.com">Work With Me →</GhostButton>
         <div style={{ marginTop: 20, fontSize: 13, color: "rgba(255,255,255,0.18)" }}>
-          No commitments · <span style={{ color: "#3b82f6" }}>visualdives7@gmail.com</span>
+          No commitments · <span style={{ color: "#3b82f6" }}>sandeepxsahu@gmail.com</span>
         </div>
       </Reveal>
     </section>
@@ -1426,7 +1426,7 @@ export default function App() {
               ))}
             </div>
 
-            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>visualdives7@gmail.com</div>
+            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>sandeepxsahu@gmail.com</div>
           </div>
         </footer>
       </div>
