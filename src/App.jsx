@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { FaInstagram, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 
 /* ─────────────────────────────
    GLOBAL DESIGN SYSTEM
@@ -1378,73 +1379,55 @@ export default function App() {
         <FAQ />
         <CTA />
 
-        <section
-          style={{
-            padding: "0 8% 60px",
-            display: "flex",
-            justifyContent: "center",
-            gap: 18,
-            flexWrap: "wrap",
-          }}
-        >
-          {[
-            { label: "Instagram", url: "https://www.instagram.com/visualdives7/?hl=en" },
-            { label: "LinkedIn", url: "https://www.linkedin.com/in/design-by-san-%F0%9F%8E%A8-3a9b44320/" },
-            { label: "X", url: "https://x.com/VisualDives" },
-          ].map((item) => (
-            <a
-              key={item.label}
-              href={item.url}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                textDecoration: "none",
-                color: "#fff",
-                fontSize: 13,
-                fontWeight: 500,
-                padding: "12px 22px",
-                borderRadius: 999,
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                transition: "transform .35s cubic-bezier(.22,.61,.36,1), background .35s ease, box-shadow .35s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.background = "rgba(37,99,235,0.12)";
-                e.currentTarget.style.boxShadow = "0 10px 25px rgba(37,99,235,0.18)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.03)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              {item.label}
-            </a>
-          ))}
-        </section>
-
-        <footer
-          style={{
-            borderTop: `1px solid ${theme.line}`,
-            padding: isMobile ? "24px 20px" : "26px 8%",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 16,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 26, height: 26, borderRadius: 6, background: "linear-gradient(135deg,#2563eb,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 900 }}>
-              VD
+        <footer style={{ padding: isMobile ? "32px 20px" : "40px 8%", borderTop: `1px solid ${theme.line}` }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20 }}>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 6 }}>VisualDives</div>
+              <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>© 2026 VisualDives</div>
             </div>
-            <span style={{ fontWeight: 900, fontSize: 12, letterSpacing: 1.5, textTransform: "uppercase" }}>VisualDives</span>
+
+            <div style={{ display: "flex", gap: 12 }}>
+              {[
+                { icon: <FaInstagram size={18} />, link: "https://www.instagram.com/visualdives7/?hl=en" },
+                { icon: <FaLinkedinIn size={18} />, link: "https://www.linkedin.com/in/design-by-san-%F0%9F%8E%A8-3a9b44320/" },
+                { icon: <FaXTwitter size={18} />, link: "https://x.com/VisualDives" },
+              ].map((item, i) => (
+                <a
+                  key={i}
+                  href={item.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    width: 42,
+                    height: 42,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textDecoration: "none",
+                    color: "#fff",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    background: "rgba(255,255,255,0.03)",
+                    transition: "all .3s cubic-bezier(.22,.61,.36,1)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.borderColor = "rgba(37,99,235,0.5)";
+                    e.currentTarget.style.boxShadow = "0 8px 20px rgba(37,99,235,0.15)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  {item.icon}
+                </a>
+              ))}
+            </div>
+
+            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>visualdives7@gmail.com</div>
           </div>
-          <div style={{ color: "rgba(255,255,255,0.18)", fontSize: 12 }}>© 2025 VisualDives · All rights reserved.</div>
-          <a href="mailto:Sandeepxsahu@gmail.com" style={{ color: "rgba(255,255,255,0.28)", fontSize: 12, textDecoration: "none" }}>
-            Sandeepxsahu@gmail.com
-          </a>
         </footer>
       </div>
     </>
