@@ -866,7 +866,7 @@ const FeaturedWork = () => {
         </Reveal>
 
         {workData.map((w, i) => (
-          <div key={w.title} style={{ position: "sticky", top: isMobile ? 68 + i * 10 : 170 + i * 30, zIndex: i + 1, marginBottom: i < workData.length - 1 ? 72 : 96 }}>
+          <div key={w.title} style={{ position: "sticky", top: isMobile ? 68 + i * 10 : 72 + i * 18, zIndex: i + 1, marginBottom: i < workData.length - 1 ? 72 : 96 }}>
             <div style={{ background: theme.surface, border: `1px solid ${theme.line}`, borderRadius: 20, overflow: "hidden", boxShadow: "0 24px 60px rgba(0,0,0,0.68)" }}>
               <Slider before={<DullThumb text={w.dull} />} after={<VividThumb bg1={w.b1} bg2={w.b2} text={w.text} accent={w.accent} />} />
               <div style={{ padding: isMobile ? "18px 18px 20px" : "18px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
