@@ -1281,9 +1281,9 @@ const CTA = () => {
           </span>
         </h2>
         <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 17, marginBottom: 44 }}>Every click counts. Let's make yours.</p>
-        <GhostButton href="mailto:workwithme@clickcraft.studio">Work With Me →</GhostButton>
+        <GhostButton href="mailto:visualdives7@gmail.com">Work With Me →</GhostButton>
         <div style={{ marginTop: 20, fontSize: 13, color: "rgba(255,255,255,0.18)" }}>
-          No commitments · <span style={{ color: "#3b82f6" }}>workwithme@clickcraft.studio</span>
+          No commitments · <span style={{ color: "#3b82f6" }}>visualdives7@gmail.com</span>
         </div>
       </Reveal>
     </section>
@@ -1331,9 +1331,9 @@ export default function App() {
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#2563eb,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900 }}>
-              CC
+              VD
             </div>
-            <span style={{ fontWeight: 900, fontSize: 14, letterSpacing: 1.5, textTransform: "uppercase" }}>ClickCraft</span>
+            <span style={{ fontWeight: 900, fontSize: 14, letterSpacing: 1.5, textTransform: "uppercase" }}>VisualDives</span>
           </div>
 
           {!isMobile ? (
