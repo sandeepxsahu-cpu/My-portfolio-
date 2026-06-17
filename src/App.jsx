@@ -113,6 +113,30 @@ const useInView = (threshold = 0.12) => {
   return [ref, inView];
 };
 
+const useCountUp = (target, duration = 2000, inView = false) => {
+  const [count, setCount] = useState(0);
+  const raf = useRef(null);
+
+  useEffect(() => {
+    if (!inView) return;
+    const start = performance.now();
+
+    const tick = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) raf.current = requestAnimationFrame(tick);
+    };
+
+    raf.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf.current);
+  }, [inView, target, duration]);
+
+  return count;
+};
+
 const Reveal = ({ children, delay = 0, style = {} }) => {
   const [ref, inView] = useInView();
   return (
@@ -399,21 +423,30 @@ const Slider = ({ before, after }) => {
 const GhostButton = ({ children, onClick, style = {}, href, variant = "primary", compact = false }) => {
   const [hovered, setHovered] = useState(false);
 
+  const isPrimary = variant === "primary";
+
   const baseStyle =
     variant === "secondary"
       ? {
-          background: hovered ? "rgba(255,255,255,0.05)" : "transparent",
+          background: hovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)",
           color: "#fff",
-          border: `1.5px solid ${hovered ? "rgba(255,255,255,0.42)" : "rgba(255,255,255,0.18)"}`,
+          border: `1.5px solid ${hovered ? "rgba(255,255,255,0.34)" : "rgba(255,255,255,0.14)"}`,
+          boxShadow: hovered ? "0 12px 28px rgba(0,0,0,0.18)" : "none",
         }
       : {
-          background: hovered ? "#1d4ed8" : theme.accent,
+          background: hovered
+            ? "linear-gradient(135deg, rgba(45,125,255,0.98), rgba(37,99,235,0.98))"
+            : "linear-gradient(135deg, rgba(52,118,255,0.95), rgba(37,99,235,0.96))",
           color: "#fff",
-          border: "none",
-          boxShadow: hovered ? "0 12px 32px rgba(37,99,235,0.42)" : "none",
+          border: "1px solid rgba(255,255,255,0.08)",
+          boxShadow: hovered
+            ? "0 14px 32px rgba(37,99,235,0.28), inset 0 1px 0 rgba(255,255,255,0.16)"
+            : "0 10px 24px rgba(37,99,235,0.16), inset 0 1px 0 rgba(255,255,255,0.08)",
         };
 
   const shared = {
+    position: "relative",
+    overflow: "hidden",
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
@@ -424,11 +457,20 @@ const GhostButton = ({ children, onClick, style = {}, href, variant = "primary",
     fontSize: compact ? 13 : 14,
     cursor: "pointer",
     textDecoration: "none",
-    transition: "transform 0.22s ease, background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease",
+    transition:
+      "transform 0.45s cubic-bezier(.22,.61,.36,1), background 0.45s cubic-bezier(.22,.61,.36,1), border-color 0.45s cubic-bezier(.22,.61,.36,1), box-shadow 0.45s cubic-bezier(.22,.61,.36,1), filter 0.45s cubic-bezier(.22,.61,.36,1)",
     transform: hovered ? "translateY(-2px)" : "translateY(0)",
-    willChange: "transform",
+    filter: hovered ? "brightness(1.05)" : "brightness(1)",
+    willChange: "transform, filter",
+    backdropFilter: variant === "secondary" ? "blur(16px)" : "none",
+    WebkitBackdropFilter: variant === "secondary" ? "blur(16px)" : "none",
     ...baseStyle,
     ...style,
+  };
+
+  const contentStyle = {
+    position: "relative",
+    zIndex: 1,
   };
 
   const interactiveProps = {
@@ -436,21 +478,23 @@ const GhostButton = ({ children, onClick, style = {}, href, variant = "primary",
     onMouseLeave: () => setHovered(false),
   };
 
+  const buttonContent = (
+    <>
+      <span style={contentStyle}>{children}</span>
+    </>
+  );
+
   if (href) {
     return (
-      <a
-        href={href}
-        style={{ ...shared, textDecoration: "none" }}
-        {...interactiveProps}
-      >
-        {children}
+      <a href={href} style={{ ...shared, textDecoration: "none" }} {...interactiveProps}>
+        {buttonContent}
       </a>
     );
   }
 
   return (
     <button type="button" onClick={onClick} style={shared} {...interactiveProps}>
-      {children}
+      {buttonContent}
     </button>
   );
 };
@@ -479,14 +523,13 @@ const Hero = ({ onScrollTo }) => {
     return () => window.removeEventListener("mousemove", fn);
   }, [isMobile]);
 
-  const THUMB_W = isTablet ? 160 : 200;
+  const THUMB_W = isTablet ? 180 : 224;
 
   const leftThumbs = [
     { bg1: "#0d0b2b", bg2: "#3d2fa0", text: "10 MONEY MISTAKES", accent: "#ffd700" },
     { bg1: "#1a0533", bg2: "#7c3aed", text: "I TRIED 30 DAYS", accent: "#f0abfc" },
     { bg1: "#001833", bg2: "#0052cc", text: "TRUTH ABOUT AI", accent: "#93c5fd" },
     { bg1: "#0a1f0a", bg2: "#166534", text: "BUDGET SECRETS", accent: "#86efac" },
-    { bg1: "#2a0a0a", bg2: "#991b1b", text: "VIRAL IN 24HRS", accent: "#fca5a5" },
   ];
 
   const rightThumbs = [
@@ -494,7 +537,6 @@ const Hero = ({ onScrollTo }) => {
     { bg1: "#0a0a1f", bg2: "#1d4ed8", text: "WATCH BEFORE DELETE", accent: "#bfdbfe" },
     { bg1: "#1a0a2e", bg2: "#6d28d9", text: "ALGORITHM HACK", accent: "#e9d5ff" },
     { bg1: "#0a1f10", bg2: "#065f46", text: "EARN ₹1L ONLINE", accent: "#6ee7b7" },
-    { bg1: "#1f1a0a", bg2: "#b45309", text: "GAMING SETUP 2025", accent: "#fde68a" },
   ];
 
   return (
@@ -527,7 +569,7 @@ const Hero = ({ onScrollTo }) => {
             flexDirection: "column",
             gap: 14,
             padding: "0 0 0 3vw",
-            transform: `perspective(1000px) rotateY(${18 + mouse.x * 6}deg) rotateX(${mouse.y * -4}deg)`,
+            transform: `perspective(1400px) rotateY(${26 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
             transition: "transform 0.15s ease-out",
             maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
@@ -622,7 +664,7 @@ const Hero = ({ onScrollTo }) => {
             flexDirection: "column",
             gap: 14,
             padding: "0 3vw 0 0",
-            transform: `perspective(1000px) rotateY(${-18 + mouse.x * 6}deg) rotateX(${mouse.y * -4}deg)`,
+            transform: `perspective(1400px) rotateY(${-26 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
             transition: "transform 0.15s ease-out",
             maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
@@ -649,8 +691,21 @@ const Hero = ({ onScrollTo }) => {
 /* ─────────────────────────────
    INTRO
 ───────────────────────────── */
+const statsData = [
+  { target: 200, suffix: "+",  label: "Thumbnails Delivered", duration: 1800 },
+  { target: 50,  suffix: "M+", label: "Thumbnail Clicks",     duration: 2000 },
+  { target: 30,  suffix: "+",  label: "Creator Clients",      duration: 1600 },
+];
+
+const StatNumber = ({ target, suffix, duration, inView }) => {
+  const count = useCountUp(target, duration, inView);
+  return <span>{count}{suffix}</span>;
+};
+
 const Intro = () => {
   const { isMobile } = useViewport();
+  const [statsHover, setStatsHover] = useState(false);
+  const [statsRef, statsInView] = useInView(0.3);
 
   return (
     <section
@@ -664,31 +719,52 @@ const Intro = () => {
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <Reveal>
           <div
+            ref={statsRef}
             style={{
+              position: "relative",
               display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-              background: theme.accent,
-              borderRadius: 22,
-              overflow: "hidden",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
               marginBottom: 72,
+              borderRadius: 20,
+              overflow: "hidden",
+              background: "linear-gradient(180deg, rgba(59,130,246,0.95) 0%, rgba(37,99,235,0.88) 100%)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              boxShadow: statsHover
+                ? "0 24px 60px rgba(37,99,235,0.18)"
+                : "0 20px 50px rgba(37,99,235,0.22)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              opacity: 0.92,
+              transform: statsHover ? "translateY(-3px)" : "translateY(0)",
+              transition: "transform 0.35s cubic-bezier(.22,.61,.36,1), box-shadow 0.35s cubic-bezier(.22,.61,.36,1), border-color 0.35s cubic-bezier(.22,.61,.36,1)",
             }}
+            onMouseEnter={() => setStatsHover(true)}
+            onMouseLeave={() => setStatsHover(false)}
           >
-            {[
-              ["200+", "Thumbnails Delivered"],
-              ["50M+", "Thumbnail Clicks"],
-              ["30+", "Creator Clients"],
-            ].map(([n, l], i) => (
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "rgba(255,255,255,0.35)" }} />
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(120% 70% at 50% 0%, rgba(255,255,255,0.09), transparent 52%)", pointerEvents: "none" }} />
+            {statsData.map(({ target, suffix, label, duration }, i) => (
               <div
-                key={l}
+                key={label}
                 style={{
+                  position: "relative",
+                  zIndex: 1,
                   textAlign: "center",
                   padding: "34px 20px",
-                  borderRight: !isMobile && i < 2 ? "1px solid rgba(255,255,255,0.14)" : "none",
-                  borderBottom: isMobile && i < 2 ? "1px solid rgba(255,255,255,0.14)" : "none",
+                  borderRight: !isMobile && i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                  borderBottom: isMobile && i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                  background: "rgba(255,255,255,0.015)",
                 }}
               >
-                <div style={{ fontSize: "clamp(30px,4vw,48px)", fontWeight: 900, color: "#fff" }}>{n}</div>
-                <div style={{ fontSize: 14, color: "rgba(255,255,255,0.66)", marginTop: 6, fontWeight: 500 }}>{l}</div>
+                <div style={{
+                  fontSize: i === 1 ? "clamp(36px,4.5vw,56px)" : "clamp(30px,4vw,48px)",
+                  fontWeight: 900,
+                  color: "#fff",
+                  textShadow: "0 2px 18px rgba(0,0,0,0.18)",
+                }}>
+                  <StatNumber target={target} suffix={suffix} duration={duration} inView={statsInView} />
+                </div>
+                <div style={{ fontSize: 14, color: "rgba(255,255,255,0.78)", marginTop: 6, fontWeight: 500 }}>{label}</div>
               </div>
             ))}
           </div>
@@ -763,6 +839,7 @@ const Intro = () => {
 /* ─────────────────────────────
    FEATURED WORK DATA
 ───────────────────────────── */
+
 const workData = [
   { title: "From Invisible to Viral", niche: "Gaming", stat: "+312% CTR", hook: "Curiosity Gap + Emotion", b1: "#0f0c29", b2: "#302b63", text: "10 MONEY TIPS", accent: "#ffd700", dull: "10 MONEY TIPS" },
   { title: "The Comeback Story", niche: "Personal Finance", stat: "2.4M Views", hook: "Transformation Narrative", b1: "#7f1d1d", b2: "#dc2626", text: "MY COMEBACK STORY", accent: "#fef2f2", dull: "MY STORY" },
@@ -815,6 +892,7 @@ const FeaturedWork = () => {
 ───────────────────────────── */
 const HowIWork = () => {
   const { isMobile, isTablet } = useViewport();
+  const [activeStep, setActiveStep] = useState(null);
   const steps = [
     ["Brief", "Share your script or concept. I dive deep to capture the message and vibe."],
     ["Research", "I brainstorm 4–7 click-worthy ideas using your niche and audience psychology."],
@@ -837,7 +915,7 @@ const HowIWork = () => {
           style={{
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(5, 1fr)",
-            gap: 24,
+            gap: 20,
             position: "relative",
           }}
         >
@@ -849,35 +927,79 @@ const HowIWork = () => {
                 left: "5%",
                 right: "5%",
                 height: 1,
-                background: "linear-gradient(90deg,transparent,rgba(59,130,246,0.25),rgba(59,130,246,0.25),transparent)",
+                background: "linear-gradient(90deg,transparent,rgba(59,130,246,0.22),rgba(59,130,246,0.22),transparent)",
                 zIndex: 0,
               }}
             />
           ) : null}
-          {steps.map(([title, desc], i) => (
-            <Reveal key={title} delay={i * 0.1} style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
+
+          {steps.map(([title, desc], i) => {
+            const active = activeStep === i;
+            return (
               <div
+                key={title}
                 style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 14,
-                  background: "linear-gradient(135deg,#1e3a5f,#2563eb)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  margin: "0 auto 18px",
-                  fontWeight: 900,
-                  fontSize: 15,
-                  border: "2px solid rgba(37,99,235,0.35)",
-                  boxShadow: "0 6px 20px rgba(37,99,235,0.22)",
+                  textAlign: "center",
+                  position: "relative",
+                  zIndex: 1,
+                  padding: "8px 10px 4px",
+                  borderRadius: 18,
+                  background: active ? "rgba(255,255,255,0.03)" : "transparent",
+                  border: `1px solid ${active ? "rgba(59,130,246,0.16)" : "transparent"}`,
+                  boxShadow: active ? "0 16px 40px rgba(0,0,0,0.18)" : "none",
+                  transform: active ? "translateY(-4px)" : "translateY(0)",
+                  transition: "transform 0.4s cubic-bezier(.22,.61,.36,1), box-shadow 0.4s cubic-bezier(.22,.61,.36,1), border-color 0.4s cubic-bezier(.22,.61,.36,1), background 0.4s cubic-bezier(.22,.61,.36,1)",
                 }}
+                onMouseEnter={() => setActiveStep(i)}
+                onMouseLeave={() => setActiveStep(null)}
               >
-                {i + 1}
+                <div
+                  style={{
+                    width: 54,
+                    height: 54,
+                    borderRadius: 16,
+                    background: active ? "linear-gradient(135deg,#2f74ff,#7c3aed)" : "linear-gradient(135deg,#1e3a5f,#2563eb)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0 auto 16px",
+                    fontWeight: 900,
+                    fontSize: 15,
+                    border: "1px solid rgba(255,255,255,0.10)",
+                    boxShadow: active ? "0 10px 28px rgba(37,99,235,0.28)" : "0 6px 20px rgba(37,99,235,0.18)",
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
+                >
+                  <span
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.16) 30%, transparent 60%)",
+                      transform: active ? "translateX(100%) skewX(-18deg)" : "translateX(-120%) skewX(-18deg)",
+                      transition: "transform 0.9s cubic-bezier(.22,.61,.36,1)",
+                      pointerEvents: "none",
+                    }}
+                  />
+                  <span style={{ position: "relative", zIndex: 1 }}>{i + 1}</span>
+                </div>
+
+                <div
+                  style={{
+                    width: 1,
+                    height: active ? 30 : 18,
+                    margin: "0 auto 14px",
+                    background: active ? "linear-gradient(to bottom, rgba(59,130,246,0.9), rgba(59,130,246,0.1))" : "rgba(255,255,255,0.10)",
+                    boxShadow: active ? "0 0 18px rgba(59,130,246,0.30)" : "none",
+                    transition: "height 0.4s cubic-bezier(.22,.61,.36,1), box-shadow 0.4s cubic-bezier(.22,.61,.36,1), background 0.4s cubic-bezier(.22,.61,.36,1)",
+                  }}
+                />
+
+                <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 10 }}>{title}</div>
+                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", lineHeight: 1.75 }}>{desc}</div>
               </div>
-              <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 10 }}>{title}</div>
-              <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", lineHeight: 1.75 }}>{desc}</div>
-            </Reveal>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1199,10 +1321,11 @@ export default function App() {
             alignItems: "center",
             justifyContent: "space-between",
             gap: 16,
-            background: navScrolled ? "rgba(8,10,15,0.92)" : "transparent",
-            backdropFilter: navScrolled ? "blur(20px)" : "none",
-            borderBottom: navScrolled ? `1px solid ${theme.line}` : "none",
-            transition: "all 0.3s",
+            background: navScrolled ? "rgba(10,14,22,0.68)" : "rgba(10,14,22,0.20)",
+            backdropFilter: navScrolled ? "blur(24px)" : "blur(14px)",
+            borderBottom: navScrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(255,255,255,0.03)",
+            boxShadow: navScrolled ? "0 8px 24px rgba(0,0,0,0.20)" : "none",
+          transition: "all 0.35s cubic-bezier(.22,.61,.36,1)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
