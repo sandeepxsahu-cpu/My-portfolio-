@@ -60,6 +60,26 @@ const GlobalStyles = () => (
     @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
     @keyframes softFloat { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-6px)} }
 
+    @keyframes particleFall {
+      0%   { transform: translateY(-10px) translateX(0px); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateY(100vh) translateX(var(--drift)); opacity: 0; }
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,var(--op));
+      width: var(--sz);
+      height: var(--sz);
+      top: var(--top);
+      left: var(--left);
+      animation: particleFall var(--dur) var(--delay) linear infinite;
+      pointer-events: none;
+      box-shadow: 0 0 var(--glow) rgba(147,197,253,var(--op));
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after {
@@ -125,7 +145,6 @@ const useCountUp = (target, duration = 2000, inView = false) => {
     const tick = (now) => {
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
-      // ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.floor(eased * target));
       if (progress < 1) raf.current = requestAnimationFrame(tick);
@@ -300,13 +319,9 @@ const Slider = ({ before, after }) => {
   }, []);
 
   useEffect(() => {
-    const up = () => {
-      dragging.current = false;
-    };
+    const up = () => { dragging.current = false; };
     const mm = (e) => move(e.clientX);
-    const tm = (e) => {
-      if (e.touches?.[0]) move(e.touches[0].clientX);
-    };
+    const tm = (e) => { if (e.touches?.[0]) move(e.touches[0].clientX); };
 
     window.addEventListener("mouseup", up);
     window.addEventListener("mousemove", mm);
@@ -324,12 +339,8 @@ const Slider = ({ before, after }) => {
   return (
     <div
       ref={ref}
-      onMouseDown={() => {
-        dragging.current = true;
-      }}
-      onTouchStart={() => {
-        dragging.current = true;
-      }}
+      onMouseDown={() => { dragging.current = true; }}
+      onTouchStart={() => { dragging.current = true; }}
       style={{
         position: "relative",
         width: "100%",
@@ -424,8 +435,6 @@ const Slider = ({ before, after }) => {
 const GhostButton = ({ children, onClick, style = {}, href, variant = "primary", compact = false }) => {
   const [hovered, setHovered] = useState(false);
 
-  const isPrimary = variant === "primary";
-
   const baseStyle =
     variant === "secondary"
       ? {
@@ -447,6 +456,7 @@ const GhostButton = ({ children, onClick, style = {}, href, variant = "primary",
 
   const shared = {
     position: "relative",
+    zIndex: 2,
     overflow: "hidden",
     display: "inline-flex",
     alignItems: "center",
@@ -469,21 +479,12 @@ const GhostButton = ({ children, onClick, style = {}, href, variant = "primary",
     ...style,
   };
 
-  const contentStyle = {
-    position: "relative",
-    zIndex: 1,
-  };
-
   const interactiveProps = {
     onMouseEnter: () => setHovered(true),
     onMouseLeave: () => setHovered(false),
   };
 
-  const buttonContent = (
-    <>
-      <span style={contentStyle}>{children}</span>
-    </>
-  );
+  const buttonContent = <span style={{ position: "relative", zIndex: 1 }}>{children}</span>;
 
   if (href) {
     return (
@@ -497,6 +498,50 @@ const GhostButton = ({ children, onClick, style = {}, href, variant = "primary",
     <button type="button" onClick={onClick} style={shared} {...interactiveProps}>
       {buttonContent}
     </button>
+  );
+};
+
+/* ─────────────────────────────
+   PARTICLE BACKGROUND
+───────────────────────────── */
+const ParticleBackground = () => {
+  const particles = [
+    { left: "8%",  top: "-4%",  sz: "2px",  op: "0.18", dur: "14s", delay: "0s",    drift: "12px",  glow: "3px"  },
+    { left: "19%", top: "-8%",  sz: "1.5px",op: "0.12", dur: "18s", delay: "2.4s",  drift: "-8px",  glow: "2px"  },
+    { left: "32%", top: "-2%",  sz: "2.5px",op: "0.22", dur: "11s", delay: "0.8s",  drift: "18px",  glow: "4px"  },
+    { left: "45%", top: "-6%",  sz: "1px",  op: "0.10", dur: "20s", delay: "4.0s",  drift: "-14px", glow: "2px"  },
+    { left: "57%", top: "-3%",  sz: "2px",  op: "0.16", dur: "15s", delay: "1.6s",  drift: "10px",  glow: "3px"  },
+    { left: "68%", top: "-9%",  sz: "3px",  op: "0.14", dur: "12s", delay: "3.2s",  drift: "-20px", glow: "5px"  },
+    { left: "79%", top: "-1%",  sz: "1.5px",op: "0.20", dur: "17s", delay: "0.4s",  drift: "16px",  glow: "2px"  },
+    { left: "88%", top: "-5%",  sz: "2px",  op: "0.13", dur: "13s", delay: "5.0s",  drift: "-10px", glow: "3px"  },
+    { left: "14%", top: "-12%", sz: "1px",  op: "0.09", dur: "22s", delay: "1.2s",  drift: "6px",   glow: "2px"  },
+    { left: "26%", top: "-7%",  sz: "2.5px",op: "0.19", dur: "10s", delay: "6.0s",  drift: "-16px", glow: "4px"  },
+    { left: "40%", top: "-10%", sz: "1.5px",op: "0.11", dur: "19s", delay: "2.8s",  drift: "20px",  glow: "2px"  },
+    { left: "63%", top: "-4%",  sz: "2px",  op: "0.17", dur: "16s", delay: "4.8s",  drift: "-12px", glow: "3px"  },
+    { left: "74%", top: "-8%",  sz: "1px",  op: "0.08", dur: "24s", delay: "0.0s",  drift: "8px",   glow: "2px"  },
+    { left: "92%", top: "-3%",  sz: "2.5px",op: "0.21", dur: "9s",  delay: "3.6s",  drift: "-18px", glow: "4px"  },
+    { left: "3%",  top: "-6%",  sz: "1.5px",op: "0.14", dur: "21s", delay: "7.0s",  drift: "14px",  glow: "2px"  },
+  ];
+
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
+      {particles.map((p, i) => (
+        <div
+          key={i}
+          className="particle"
+          style={{
+            "--sz": p.sz,
+            "--op": p.op,
+            "--dur": p.dur,
+            "--delay": p.delay,
+            "--drift": p.drift,
+            "--glow": p.glow,
+            "--top": p.top,
+            "--left": p.left,
+          }}
+        />
+      ))}
+    </div>
   );
 };
 
@@ -554,14 +599,19 @@ const Hero = ({ onScrollTo }) => {
         overflow: "hidden",
       }}
     >
+      {/* Ambient radial glow */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(37,99,235,0.08) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(37,99,235,0.07) 0%, transparent 70%)",
           pointerEvents: "none",
+          zIndex: 0,
         }}
       />
+
+      {/* Particle background */}
+      <ParticleBackground />
 
       {!isMobile ? (
         <div
@@ -575,6 +625,8 @@ const Hero = ({ onScrollTo }) => {
             maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
             flexShrink: 0,
+            position: "relative",
+            zIndex: 1,
           }}
         >
           {leftThumbs.map((t, i) => (
@@ -598,6 +650,7 @@ const Hero = ({ onScrollTo }) => {
           padding: isMobile ? "0" : "0 2vw",
           transform: isMobile ? "none" : `translateY(${mouse.y * -5}px)`,
           transition: "transform 0.2s ease-out",
+          position: "relative",
           zIndex: 2,
           maxWidth: isMobile ? 760 : 900,
           margin: "0 auto",
@@ -612,7 +665,7 @@ const Hero = ({ onScrollTo }) => {
             border: "1px solid rgba(37,99,235,0.3)",
             padding: "7px 18px",
             borderRadius: 999,
-            marginBottom: 26,
+            marginBottom: 30,
           }}
         >
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#3b82f6", animation: "pulse 2s infinite" }} />
@@ -623,11 +676,11 @@ const Hero = ({ onScrollTo }) => {
 
         <h1
           style={{
-            fontSize: "clamp(34px, 4vw, 66px)",
+            fontSize: "clamp(36px, 4.5vw, 72px)",
             fontWeight: 900,
-            lineHeight: 1.04,
+            lineHeight: 1.06,
             letterSpacing: "-0.04em",
-            marginBottom: 32,
+            marginBottom: 20,
             whiteSpace: isMobile ? "normal" : "nowrap",
           }}
         >
@@ -645,6 +698,10 @@ const Hero = ({ onScrollTo }) => {
           </span>
         </h1>
 
+        <p style={{ fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.44)", lineHeight: 1.7, marginBottom: 36, maxWidth: 480, margin: "0 auto 36px" }}>
+          Strategic thumbnail design for YouTube creators who want real clicks, not just pretty pictures.
+        </p>
+
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: isMobile ? "wrap" : "nowrap" }}>
           <GhostButton onClick={() => onScrollTo("work")}>View My Work</GhostButton>
           <GhostButton variant="secondary" onClick={() => onScrollTo("contact")}>
@@ -652,7 +709,7 @@ const Hero = ({ onScrollTo }) => {
           </GhostButton>
         </div>
 
-        <div style={{ marginTop: 44, display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+        <div style={{ marginTop: 48, display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 10, color: "rgba(255,255,255,0.2)", letterSpacing: 3, textTransform: "uppercase" }}>Scroll</span>
           <div style={{ width: 1, height: 36, background: "linear-gradient(to bottom, rgba(255,255,255,0.15), transparent)", animation: "scrollBounce 2s ease-in-out infinite" }} />
         </div>
@@ -670,6 +727,8 @@ const Hero = ({ onScrollTo }) => {
             maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
             flexShrink: 0,
+            position: "relative",
+            zIndex: 1,
           }}
         >
           {rightThumbs.map((t, i) => (
@@ -712,12 +771,13 @@ const Intro = () => {
     <section
       style={{
         width: "100%",
-        padding: isMobile ? "84px 20px" : "100px 8%",
+        padding: isMobile ? "84px 20px" : "110px 8%",
         background: theme.bgAlt,
         borderTop: `1px solid ${theme.line}`,
       }}
     >
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        {/* Stats bar */}
         <Reveal>
           <div
             ref={statsRef}
@@ -726,7 +786,7 @@ const Intro = () => {
               display: "grid",
               gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
               maxWidth: 1100,
-              margin: "0 auto 72px",
+              margin: "0 auto 80px",
               borderRadius: 20,
               overflow: "hidden",
               background: "linear-gradient(180deg, rgba(59,130,246,0.92) 0%, rgba(37,99,235,0.88) 100%)",
@@ -738,7 +798,7 @@ const Intro = () => {
               WebkitBackdropFilter: "blur(14px)",
               opacity: 0.92,
               transform: statsHover ? "translateY(-3px)" : "translateY(0)",
-              transition: "transform 0.35s cubic-bezier(.22,.61,.36,1), box-shadow 0.35s cubic-bezier(.22,.61,.36,1), border-color 0.35s cubic-bezier(.22,.61,.36,1)",
+              transition: "transform 0.35s cubic-bezier(.22,.61,.36,1), box-shadow 0.35s cubic-bezier(.22,.61,.36,1)",
             }}
             onMouseEnter={() => setStatsHover(true)}
             onMouseLeave={() => setStatsHover(false)}
@@ -752,7 +812,7 @@ const Intro = () => {
                   position: "relative",
                   zIndex: 1,
                   textAlign: "center",
-                  padding: "34px 20px",
+                  padding: "36px 20px",
                   borderRight: !isMobile && i < 2 ? "1px solid rgba(255,255,255,0.06)" : "none",
                   borderBottom: isMobile && i < 2 ? "1px solid rgba(255,255,255,0.06)" : "none",
                   background: "rgba(255,255,255,0.015)",
@@ -772,67 +832,27 @@ const Intro = () => {
           </div>
         </Reveal>
 
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 44 : 80, alignItems: "center" }}>
-          <Reveal delay={0.1}>
+        {/* Meet the Designer — centered, no right card */}
+        <Reveal delay={0.1}>
+          <div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center" }}>
             <SectionLabel>Meet the Designer</SectionLabel>
-            <h2 style={{ fontSize: "clamp(30px, 3.5vw, 52px)", fontWeight: 900, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 22 }}>
+            <h2 style={{ fontSize: "clamp(32px, 3.8vw, 56px)", fontWeight: 900, lineHeight: 1.06, letterSpacing: "-1.5px", marginBottom: 24 }}>
               Yo, I'm Sandeep 👋
             </h2>
-            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.58)", lineHeight: 1.9, marginBottom: 18 }}>
+            <p style={{ fontSize: 17, color: "rgba(255,255,255,0.62)", lineHeight: 1.85, marginBottom: 16 }}>
               I help YouTube creators strategize and package their videos for clicks.
             </p>
-            <p style={{ fontSize: 15, color: "rgba(255,255,255,0.38)", lineHeight: 1.9, marginBottom: 32 }}>
-              At <strong style={{ color: "#93c5fd" }}>VisualDives</strong>, I focus on creating thumbnails that do more than look good. Every design is built around understanding the video, the audience, and what makes people stop scrolling and pay attention.
+            <p style={{ fontSize: 15, color: "rgba(255,255,255,0.38)", lineHeight: 1.9, marginBottom: 40, maxWidth: 520, margin: "0 auto 40px" }}>
+              At <strong style={{ color: "#93c5fd" }}>VisualDives</strong>, every design is built around understanding the video, the audience, and what makes people stop scrolling and pay attention.
             </p>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
               <GhostButton onClick={() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth" })}>My Work</GhostButton>
               <GhostButton variant="secondary" onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}>
                 Let's Talk →
               </GhostButton>
             </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div style={{ position: "relative" }}>
-              <div
-                style={{
-                  aspectRatio: "4/5",
-                  borderRadius: 28,
-                  background: "linear-gradient(160deg,#0f1729,#1a3050)",
-                  border: `1px solid ${theme.lineStrong}`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  overflow: "hidden",
-                  boxShadow: "0 24px 50px rgba(0,0,0,0.22)",
-                }}
-              >
-                <div style={{ textAlign: "center", padding: 28, width: "100%" }}>
-                  <div style={{ fontSize: 64, marginBottom: 18, animation: "softFloat 4s ease-in-out infinite" }}>🎨</div>
-                  <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 12, padding: "16px 20px" }}>
-                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginBottom: 12, letterSpacing: 2 }}>CURRENT PROJECT</div>
-                    <VividThumb bg1="#ff6b35" bg2="#ffd700" text="GROW YOUR CHANNEL NOW →" accent="#fff" />
-                    <div style={{ marginTop: 10, fontSize: 11, color: "rgba(255,255,255,0.25)", letterSpacing: 1 }}>@visualdives</div>
-                  </div>
-                </div>
-              </div>
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: -16,
-                  right: -16,
-                  background: theme.accent,
-                  borderRadius: 14,
-                  padding: "14px 20px",
-                  boxShadow: "0 14px 36px rgba(37,99,235,0.45)",
-                }}
-              >
-                <div style={{ fontSize: 22, fontWeight: 900 }}>4 Yrs</div>
-                <div style={{ fontSize: 11, opacity: 0.75 }}>Experience</div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -841,7 +861,6 @@ const Intro = () => {
 /* ─────────────────────────────
    FEATURED WORK DATA
 ───────────────────────────── */
-
 const workData = [
   { title: "From Invisible to Viral", niche: "Gaming", stat: "+312% CTR", hook: "Curiosity Gap + Emotion", b1: "#0f0c29", b2: "#302b63", text: "10 MONEY TIPS", accent: "#ffd700", dull: "10 MONEY TIPS" },
   { title: "The Comeback Story", niche: "Personal Finance", stat: "2.4M Views", hook: "Transformation Narrative", b1: "#7f1d1d", b2: "#dc2626", text: "MY COMEBACK STORY", accent: "#fef2f2", dull: "MY STORY" },
@@ -904,10 +923,10 @@ const HowIWork = () => {
   ];
 
   return (
-    <section id="process" style={{ width: "100%", padding: isMobile ? "84px 20px" : "100px 8%", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
+    <section id="process" style={{ width: "100%", padding: isMobile ? "84px 20px" : "110px 8%", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <Reveal>
-          <div style={{ textAlign: "center", marginBottom: 72 }}>
+          <div style={{ textAlign: "center", marginBottom: 80 }}>
             <SectionLabel>The Method</SectionLabel>
             <h2 style={{ fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 900, letterSpacing: "-1px" }}>How I Work</h2>
           </div>
@@ -917,7 +936,7 @@ const HowIWork = () => {
           style={{
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(5, 1fr)",
-            gap: 20,
+            gap: isMobile ? 24 : 24,
             position: "relative",
           }}
         >
@@ -925,7 +944,7 @@ const HowIWork = () => {
             <div
               style={{
                 position: "absolute",
-                top: 26,
+                top: 34,
                 left: "5%",
                 right: "5%",
                 height: 1,
@@ -944,12 +963,12 @@ const HowIWork = () => {
                   textAlign: "center",
                   position: "relative",
                   zIndex: 1,
-                  padding: "8px 10px 4px",
-                  borderRadius: 18,
-                  background: active ? "rgba(255,255,255,0.03)" : "transparent",
-                  border: `1px solid ${active ? "rgba(59,130,246,0.16)" : "transparent"}`,
-                  boxShadow: active ? "0 16px 40px rgba(0,0,0,0.18)" : "none",
-                  transform: active ? "translateY(-4px)" : "translateY(0)",
+                  padding: "16px 14px 18px",
+                  borderRadius: 20,
+                  background: active ? "rgba(255,255,255,0.035)" : "rgba(255,255,255,0.01)",
+                  border: `1px solid ${active ? "rgba(59,130,246,0.20)" : "rgba(255,255,255,0.04)"}`,
+                  boxShadow: active ? "0 20px 48px rgba(0,0,0,0.22)" : "none",
+                  transform: active ? "translateY(-5px)" : "translateY(0)",
                   transition: "transform 0.4s cubic-bezier(.22,.61,.36,1), box-shadow 0.4s cubic-bezier(.22,.61,.36,1), border-color 0.4s cubic-bezier(.22,.61,.36,1), background 0.4s cubic-bezier(.22,.61,.36,1)",
                 }}
                 onMouseEnter={() => setActiveStep(i)}
@@ -957,18 +976,18 @@ const HowIWork = () => {
               >
                 <div
                   style={{
-                    width: 54,
-                    height: 54,
-                    borderRadius: 16,
+                    width: 62,
+                    height: 62,
+                    borderRadius: 18,
                     background: active ? "linear-gradient(135deg,#2f74ff,#7c3aed)" : "linear-gradient(135deg,#1e3a5f,#2563eb)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    margin: "0 auto 16px",
+                    margin: "0 auto 20px",
                     fontWeight: 900,
-                    fontSize: 15,
+                    fontSize: 17,
                     border: "1px solid rgba(255,255,255,0.10)",
-                    boxShadow: active ? "0 10px 28px rgba(37,99,235,0.28)" : "0 6px 20px rgba(37,99,235,0.18)",
+                    boxShadow: active ? "0 12px 32px rgba(37,99,235,0.32)" : "0 6px 20px rgba(37,99,235,0.18)",
                     position: "relative",
                     overflow: "hidden",
                   }}
@@ -989,16 +1008,16 @@ const HowIWork = () => {
                 <div
                   style={{
                     width: 1,
-                    height: active ? 30 : 18,
-                    margin: "0 auto 14px",
+                    height: active ? 32 : 20,
+                    margin: "0 auto 16px",
                     background: active ? "linear-gradient(to bottom, rgba(59,130,246,0.9), rgba(59,130,246,0.1))" : "rgba(255,255,255,0.10)",
                     boxShadow: active ? "0 0 18px rgba(59,130,246,0.30)" : "none",
                     transition: "height 0.4s cubic-bezier(.22,.61,.36,1), box-shadow 0.4s cubic-bezier(.22,.61,.36,1), background 0.4s cubic-bezier(.22,.61,.36,1)",
                   }}
                 />
 
-                <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 10 }}>{title}</div>
-                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", lineHeight: 1.75 }}>{desc}</div>
+                <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 12, letterSpacing: "-0.3px" }}>{title}</div>
+                <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.42)", lineHeight: 1.8 }}>{desc}</div>
               </div>
             );
           })}
@@ -1090,65 +1109,24 @@ const About = () => {
   const { isMobile } = useViewport();
 
   return (
-    <section id="about" style={{ width: "100%", padding: isMobile ? "84px 20px" : "100px 8%", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 44 : 80, alignItems: "start" }}>
+    <section id="about" style={{ width: "100%", padding: isMobile ? "84px 20px" : "110px 8%", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
+      <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
         <Reveal>
           <SectionLabel>About</SectionLabel>
-          <h2 style={{ fontSize: "clamp(36px,5vw,72px)", fontWeight: 900, letterSpacing: "-2px", lineHeight: 1, marginBottom: 34 }}>
+          <h2 style={{ fontSize: "clamp(36px,5vw,72px)", fontWeight: 900, letterSpacing: "-2px", lineHeight: 1, marginBottom: 40 }}>
             Visual<span style={{ background: "linear-gradient(90deg,#3b82f6,#8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Dives</span>
           </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
             {[
               { t: "Yo, I'm Sandeep. I help YouTube creators strategize and package their videos for clicks.", big: true },
               { t: "At VisualDives, I focus on creating thumbnails that do more than look good. Every design is built around understanding the video, the audience, and what makes people stop scrolling and pay attention.", big: false },
               { t: "I believe great thumbnails come from a combination of strategy, psychology, and strong visual communication. That's why I spend time understanding the story, message, and viewer before jumping into design.", big: false },
               { t: "My goal is simple: create thumbnails that stand out, communicate the idea instantly, and give creators the best possible chance of earning the click.", big: false },
             ].map(({ t, big }, i) => (
-              <p key={i} style={{ fontSize: big ? 18 : 15, fontWeight: big ? 700 : 400, color: big ? "rgba(255,255,255,0.84)" : "rgba(255,255,255,0.42)", lineHeight: 1.85 }}>
+              <p key={i} style={{ fontSize: big ? 18 : 15, fontWeight: big ? 700 : 400, color: big ? "rgba(255,255,255,0.84)" : "rgba(255,255,255,0.46)", lineHeight: 1.9, maxWidth: big ? "none" : 600, margin: "0 auto" }}>
                 {t}
               </p>
             ))}
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.15}>
-          <div style={{ position: "relative", marginTop: isMobile ? 20 : 60 }}>
-            <div
-              style={{
-                aspectRatio: "4/5",
-                borderRadius: 28,
-                background: "linear-gradient(160deg,#0f1729,#1a3050)",
-                border: `1px solid ${theme.lineStrong}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
-                boxShadow: "0 24px 50px rgba(0,0,0,0.22)",
-              }}
-            >
-              <div style={{ textAlign: "center", padding: 32, width: "100%" }}>
-                <div style={{ fontSize: 64, marginBottom: 18, animation: "softFloat 4s ease-in-out infinite" }}>🎨</div>
-                <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 12, padding: "16px 20px" }}>
-                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginBottom: 12, letterSpacing: 2 }}>CURRENT PROJECT</div>
-                  <VividThumb bg1="#ff6b35" bg2="#ffd700" text="GROW YOUR CHANNEL NOW" accent="#fff" />
-                  <div style={{ marginTop: 10, fontSize: 11, color: "rgba(255,255,255,0.25)", letterSpacing: 1 }}>@visualdives</div>
-                </div>
-              </div>
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                bottom: -16,
-                right: -16,
-                background: theme.accent,
-                borderRadius: 14,
-                padding: "14px 20px",
-                boxShadow: "0 14px 36px rgba(37,99,235,0.45)",
-              }}
-            >
-              <div style={{ fontSize: 22, fontWeight: 900 }}>200+</div>
-              <div style={{ fontSize: 11, opacity: 0.75 }}>Happy Clients</div>
-            </div>
           </div>
         </Reveal>
       </div>
@@ -1266,14 +1244,14 @@ const CTA = () => {
   const { isMobile } = useViewport();
 
   return (
-    <section id="contact" style={{ width: "100%", padding: isMobile ? "96px 20px" : "130px 8%", textAlign: "center", position: "relative", overflow: "hidden" }}>
+    <section id="contact" style={{ width: "100%", padding: isMobile ? "96px 20px" : "130px 8%", textAlign: "center", position: "relative", overflow: "visible" }}>
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(37,99,235,0.1) 0%, transparent 70%)", pointerEvents: "none" }} />
       <Reveal style={{ position: "relative", zIndex: 1 }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: theme.accentSoft, border: "1px solid rgba(37,99,235,0.28)", padding: "7px 18px", borderRadius: 999, marginBottom: 28 }}>
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#3b82f6", animation: "pulse 2s infinite" }} />
           <span style={{ fontSize: 11, color: theme.accentText, fontWeight: 600, letterSpacing: 2.5, textTransform: "uppercase" }}>Now Taking Projects</span>
         </div>
-        <h2 style={{ fontSize: "clamp(44px, 7vw, 90px)", fontWeight: 900, lineHeight: 1.0, letterSpacing: "-3px", marginBottom: 20 }}>
+        <h2 style={{ fontSize: "clamp(44px, 7vw, 90px)", fontWeight: 900, lineHeight: 1.05, letterSpacing: "-3px", marginBottom: 20, paddingBottom: 4 }}>
           Want Better
           <br />
           <span style={{ background: "linear-gradient(90deg,#3b82f6,#8b5cf6,#ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
@@ -1281,14 +1259,27 @@ const CTA = () => {
           </span>
         </h2>
         <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 17, marginBottom: 44 }}>Every click counts. Let's make yours.</p>
-        <GhostButton href="mailto:sandeepxsahu@gmail.com">Work With Me →</GhostButton>
-        <div style={{ marginTop: 20, fontSize: 13, color: "rgba(255,255,255,0.18)" }}>
-          No commitments · <span style={{ color: "#3b82f6" }}>sandeepxsahu@gmail.com</span>
+        <div style={{ position: "relative", zIndex: 2, display: "inline-block" }}>
+          <GhostButton href="mailto:sandeepxsahu@gmail.com">Work With Me →</GhostButton>
+        </div>
+        <div style={{ marginTop: 20, fontSize: 13, color: "rgba(255,255,255,0.32)" }}>
+          Let's create something awesome.
         </div>
       </Reveal>
     </section>
   );
 };
+
+/* ─────────────────────────────
+   LOGO COMPONENT
+───────────────────────────── */
+const Logo = ({ size = 32 }) => (
+  <img
+    src="/Logo_VD.png"
+    alt="VisualDives"
+    style={{ width: size, height: size, borderRadius: 8, objectFit: "cover", display: "block" }}
+  />
+);
 
 /* ─────────────────────────────
    APP ROOT
@@ -1317,27 +1308,25 @@ export default function App() {
             left: 0,
             right: 0,
             zIndex: 1000,
-            height: 64,
+            height: 66,
             padding: isMobile ? "0 20px" : "0 8%",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             gap: 16,
-            background: navScrolled ? "rgba(10,14,22,0.78)" : "rgba(10,14,22,0.20)",
-            backdropFilter: navScrolled ? "blur(18px)" : "blur(14px)",
-            borderBottom: navScrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(255,255,255,0.03)",
+            background: navScrolled ? "rgba(8,10,15,0.78)" : "rgba(8,10,15,0.15)",
+            backdropFilter: navScrolled ? "blur(18px)" : "blur(8px)",
+            borderBottom: navScrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid transparent",
             transition: "all 0.35s cubic-bezier(.22,.61,.36,1)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#2563eb,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900 }}>
-              VD
-            </div>
-            <span style={{ fontWeight: 900, fontSize: 14, letterSpacing: 1.5, textTransform: "uppercase" }}>VisualDives</span>
+            <Logo size={34} />
+            <span style={{ fontWeight: 900, fontSize: 15, letterSpacing: 1.5, textTransform: "uppercase" }}>VisualDives</span>
           </div>
 
           {!isMobile ? (
-            <div style={{ display: "flex", gap: 36 }}>
+            <div style={{ display: "flex", gap: 40 }}>
               {[
                 ["Work", "work"],
                 ["Process", "process"],
@@ -1348,9 +1337,9 @@ export default function App() {
                   key={id}
                   type="button"
                   onClick={() => scrollTo(id)}
-                  style={{ background: "none", border: "none", color: "rgba(255,255,255,0.5)", fontSize: 14, fontWeight: 500, cursor: "pointer", transition: "color 0.2s" }}
+                  style={{ background: "none", border: "none", color: "rgba(255,255,255,0.48)", fontSize: 14, fontWeight: 500, cursor: "pointer", transition: "color 0.2s", letterSpacing: "0.01em" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.5)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.48)")}
                 >
                   {l}
                 </button>
@@ -1381,16 +1370,19 @@ export default function App() {
 
         <footer style={{ padding: isMobile ? "32px 20px" : "40px 8%", borderTop: `1px solid ${theme.line}` }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20 }}>
-            <div>
-              <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 6 }}>VisualDives</div>
-              <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>© 2026 VisualDives</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <Logo size={30} />
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 16, lineHeight: 1.2 }}>VisualDives</div>
+                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 12 }}>© 2026 VisualDives</div>
+              </div>
             </div>
 
             <div style={{ display: "flex", gap: 12 }}>
               {[
-                { icon: <FaInstagram size={18} />, link: "https://www.instagram.com/visualdives7/?hl=en" },
-                { icon: <FaLinkedinIn size={18} />, link: "https://www.linkedin.com/in/design-by-san-%F0%9F%8E%A8-3a9b44320/" },
-                { icon: <FaXTwitter size={18} />, link: "https://x.com/VisualDives" },
+                { icon: <FaInstagram size={17} />, link: "https://www.instagram.com/visualdives7/?hl=en" },
+                { icon: <FaLinkedinIn size={17} />, link: "https://www.linkedin.com/in/design-by-san-%F0%9F%8E%A8-3a9b44320/" },
+                { icon: <FaXTwitter size={17} />, link: "https://x.com/VisualDives" },
               ].map((item, i) => (
                 <a
                   key={i}
@@ -1406,19 +1398,24 @@ export default function App() {
                     justifyContent: "center",
                     textDecoration: "none",
                     color: "#fff",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.10)",
+                    background: "rgba(255,255,255,0.04)",
+                    backdropFilter: "blur(12px)",
+                    WebkitBackdropFilter: "blur(12px)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
                     transition: "all .3s cubic-bezier(.22,.61,.36,1)",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-2px)";
-                    e.currentTarget.style.borderColor = "rgba(37,99,235,0.5)";
-                    e.currentTarget.style.boxShadow = "0 8px 20px rgba(37,99,235,0.15)";
+                    e.currentTarget.style.borderColor = "rgba(37,99,235,0.45)";
+                    e.currentTarget.style.background = "rgba(37,99,235,0.10)";
+                    e.currentTarget.style.boxShadow = "0 8px 20px rgba(37,99,235,0.15), inset 0 1px 0 rgba(255,255,255,0.10)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.10)";
+                    e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+                    e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,0.08)";
                   }}
                 >
                   {item.icon}
@@ -1426,7 +1423,7 @@ export default function App() {
               ))}
             </div>
 
-            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>sandeepxsahu@gmail.com</div>
+            <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 13 }}>sandeepxsahu@gmail.com</div>
           </div>
         </footer>
       </div>
