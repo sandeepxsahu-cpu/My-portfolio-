@@ -5,8 +5,8 @@ import { FaInstagram, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
    GLOBAL DESIGN SYSTEM
 ───────────────────────────── */
 const theme = {
-  bg: "#080a0f",
-  bgAlt: "#0a0c12",
+  bg: "#06070b",
+  bgAlt: "#08090e",
   surface: "#0f1116",
   surfaceAlt: "#141823",
   text: "#f7f8fb",
@@ -61,23 +61,22 @@ const GlobalStyles = () => (
     @keyframes softFloat { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-6px)} }
 
     @keyframes particleFall {
-      0%   { transform: translateY(-10px) translateX(0px); opacity: 0; }
-      10%  { opacity: 1; }
-      90%  { opacity: 1; }
-      100% { transform: translateY(100vh) translateX(var(--drift)); opacity: 0; }
+      0%   { transform: translateY(0) translateX(0px); }
+      100% { transform: translateY(110vh) translateX(var(--drift)); }
     }
 
     .particle {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255,255,255,var(--op));
+      background: #ffffff;
       width: var(--sz);
       height: var(--sz);
       top: var(--top);
       left: var(--left);
+      opacity: var(--op);
       animation: particleFall var(--dur) var(--delay) linear infinite;
       pointer-events: none;
-      box-shadow: 0 0 var(--glow) rgba(147,197,253,var(--op));
+      box-shadow: 0 0 var(--glow) rgba(255,255,255,0.5);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -506,21 +505,28 @@ const GhostButton = ({ children, onClick, style = {}, href, variant = "primary",
 ───────────────────────────── */
 const ParticleBackground = () => {
   const particles = [
-    { left: "8%",  top: "-4%",  sz: "2px",  op: "0.18", dur: "14s", delay: "0s",    drift: "12px",  glow: "3px"  },
-    { left: "19%", top: "-8%",  sz: "1.5px",op: "0.12", dur: "18s", delay: "2.4s",  drift: "-8px",  glow: "2px"  },
-    { left: "32%", top: "-2%",  sz: "2.5px",op: "0.22", dur: "11s", delay: "0.8s",  drift: "18px",  glow: "4px"  },
-    { left: "45%", top: "-6%",  sz: "1px",  op: "0.10", dur: "20s", delay: "4.0s",  drift: "-14px", glow: "2px"  },
-    { left: "57%", top: "-3%",  sz: "2px",  op: "0.16", dur: "15s", delay: "1.6s",  drift: "10px",  glow: "3px"  },
-    { left: "68%", top: "-9%",  sz: "3px",  op: "0.14", dur: "12s", delay: "3.2s",  drift: "-20px", glow: "5px"  },
-    { left: "79%", top: "-1%",  sz: "1.5px",op: "0.20", dur: "17s", delay: "0.4s",  drift: "16px",  glow: "2px"  },
-    { left: "88%", top: "-5%",  sz: "2px",  op: "0.13", dur: "13s", delay: "5.0s",  drift: "-10px", glow: "3px"  },
-    { left: "14%", top: "-12%", sz: "1px",  op: "0.09", dur: "22s", delay: "1.2s",  drift: "6px",   glow: "2px"  },
-    { left: "26%", top: "-7%",  sz: "2.5px",op: "0.19", dur: "10s", delay: "6.0s",  drift: "-16px", glow: "4px"  },
-    { left: "40%", top: "-10%", sz: "1.5px",op: "0.11", dur: "19s", delay: "2.8s",  drift: "20px",  glow: "2px"  },
-    { left: "63%", top: "-4%",  sz: "2px",  op: "0.17", dur: "16s", delay: "4.8s",  drift: "-12px", glow: "3px"  },
-    { left: "74%", top: "-8%",  sz: "1px",  op: "0.08", dur: "24s", delay: "0.0s",  drift: "8px",   glow: "2px"  },
-    { left: "92%", top: "-3%",  sz: "2.5px",op: "0.21", dur: "9s",  delay: "3.6s",  drift: "-18px", glow: "4px"  },
-    { left: "3%",  top: "-6%",  sz: "1.5px",op: "0.14", dur: "21s", delay: "7.0s",  drift: "14px",  glow: "2px"  },
+    { left: "5%",  top: "8%",  sz: "2px",  op: "0.55", dur: "14s", delay: "-3s",  drift: "12px",  glow: "3px" },
+    { left: "12%", top: "42%", sz: "1.5px",op: "0.40", dur: "18s", delay: "-9s",  drift: "-8px",  glow: "2px" },
+    { left: "19%", top: "15%", sz: "2.5px",op: "0.62", dur: "11s", delay: "-5s",  drift: "18px",  glow: "4px" },
+    { left: "27%", top: "65%", sz: "1px",  op: "0.32", dur: "20s", delay: "-12s", drift: "-14px", glow: "2px" },
+    { left: "34%", top: "5%",  sz: "2px",  op: "0.50", dur: "15s", delay: "-7s",  drift: "10px",  glow: "3px" },
+    { left: "41%", top: "30%", sz: "3px",  op: "0.45", dur: "12s", delay: "-2s",  drift: "-20px", glow: "5px" },
+    { left: "48%", top: "55%", sz: "1.5px",op: "0.58", dur: "17s", delay: "-10s", drift: "16px",  glow: "2px" },
+    { left: "55%", top: "10%", sz: "2px",  op: "0.38", dur: "13s", delay: "-6s",  drift: "-10px", glow: "3px" },
+    { left: "62%", top: "70%", sz: "1px",  op: "0.28", dur: "22s", delay: "-15s", drift: "6px",   glow: "2px" },
+    { left: "68%", top: "22%", sz: "2.5px",op: "0.60", dur: "10s", delay: "-4s",  drift: "-16px", glow: "4px" },
+    { left: "74%", top: "48%", sz: "1.5px",op: "0.35", dur: "19s", delay: "-11s", drift: "20px",  glow: "2px" },
+    { left: "80%", top: "8%",  sz: "2px",  op: "0.52", dur: "16s", delay: "-8s",  drift: "-12px", glow: "3px" },
+    { left: "86%", top: "60%", sz: "1px",  op: "0.25", dur: "24s", delay: "-1s",  drift: "8px",   glow: "2px" },
+    { left: "92%", top: "18%", sz: "2.5px",op: "0.64", dur: "9s",  delay: "-6s",  drift: "-18px", glow: "4px" },
+    { left: "3%",  top: "75%", sz: "1.5px",op: "0.42", dur: "21s", delay: "-14s", drift: "14px",  glow: "2px" },
+    { left: "16%", top: "85%", sz: "2px",  op: "0.48", dur: "13.5s",delay: "-3.5s",drift: "-10px", glow: "3px" },
+    { left: "23%", top: "92%", sz: "1px",  op: "0.30", dur: "17.5s",delay: "-9.5s",drift: "12px",  glow: "2px" },
+    { left: "38%", top: "80%", sz: "2.5px",op: "0.56", dur: "11.5s",delay: "-5.5s",drift: "-16px", glow: "4px" },
+    { left: "58%", top: "88%", sz: "1.5px",op: "0.36", dur: "19.5s",delay: "-13s", drift: "10px",  glow: "2px" },
+    { left: "71%", top: "82%", sz: "2px",  op: "0.50", dur: "15.5s",delay: "-2.5s",drift: "-14px", glow: "3px" },
+    { left: "89%", top: "78%", sz: "1px",  op: "0.27", dur: "23s",  delay: "-16s", drift: "8px",   glow: "2px" },
+    { left: "97%", top: "40%", sz: "2px",  op: "0.46", dur: "14.5s",delay: "-7.5s",drift: "-12px", glow: "3px" },
   ];
 
   return (
@@ -752,9 +758,9 @@ const Hero = ({ onScrollTo }) => {
    INTRO
 ───────────────────────────── */
 const statsData = [
-  { target: 200, suffix: "+",  label: "Thumbnails Delivered", duration: 1800 },
-  { target: 50,  suffix: "M+", label: "Thumbnail Clicks",     duration: 2000 },
-  { target: 30,  suffix: "+",  label: "Creator Clients",      duration: 1600 },
+  { target: 50,  suffix: "+",  label: "Thumbnails Delivered", duration: 1800 },
+  { target: 800, suffix: "K+", label: "Thumbnail Clicks",     duration: 2000 },
+  { target: 5,   suffix: "+",  label: "Creator Clients",      duration: 1200 },
 ];
 
 const StatNumber = ({ target, suffix, duration, inView }) => {
@@ -916,7 +922,7 @@ const HowIWork = () => {
   const [activeStep, setActiveStep] = useState(null);
   const steps = [
     ["Brief", "Share your script or concept. I dive deep to capture the message and vibe."],
-    ["Research", "I brainstorm 4–7 click-worthy ideas using your niche and audience psychology."],
+    ["Research", "I brainstorm 2–3 click-worthy ideas using your niche and audience psychology."],
     ["Design", "Scroll-stopping thumbnails crafted and shared in stages so you're never left guessing."],
     ["Refine", "Polish using your feedback, aiming for designs you'd double-click yourself."],
     ["Optimize", "Post-launch monitoring and A/B tests for the best possible results."],
@@ -1140,7 +1146,7 @@ const About = () => {
 const testimonials = [
   { name: "Drew Blackston", handle: "@Drew Blackston", subs: "36.2K subs", text: "My CTR went from 2.1% to 7.8% in 3 weeks. The thumbnails don't just look good — they're engineered to get clicked. Best investment I made for my channel.", color: "#2563eb" },
   { name: "Abraham", handle: "@AbrahamThePharmacist", subs: "851K subs", text: "I was skeptical about investing in thumbnail design, but the data doesn't lie. Each redesign came with a clear strategy and the results were immediate.", color: "#7c3aed" },
-  { name: "Shishir Wadhvan", handle: "@ShishirWadhvan", subs: "", text: "Working with VisualDives changed how I think about thumbnails entirely. They understand what makes people click — not just what looks pretty.", color: "#059669" },
+  { name: "Shishir Wadhvan", handle: "@ShishirWadhvan", subs: "", text: "Working with VisualDives changed how I think about thumbnails entirely. He understand what makes people click — not just what looks pretty.", color: "#059669" },
 ];
 
 const Testimonials = () => {
@@ -1368,13 +1374,13 @@ export default function App() {
         <FAQ />
         <CTA />
 
-        <footer style={{ padding: isMobile ? "32px 20px" : "40px 8%", borderTop: `1px solid ${theme.line}` }}>
+        <footer style={{ padding: isMobile ? "40px 20px" : "56px 8%", borderTop: `1px solid ${theme.line}` }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Logo size={30} />
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <Logo size={36} />
               <div>
-                <div style={{ fontWeight: 800, fontSize: 16, lineHeight: 1.2 }}>VisualDives</div>
-                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 12 }}>© 2026 VisualDives</div>
+                <div style={{ fontWeight: 800, fontSize: 18, lineHeight: 1.2 }}>VisualDives</div>
+                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 13 }}>© 2026 VisualDives</div>
               </div>
             </div>
 
