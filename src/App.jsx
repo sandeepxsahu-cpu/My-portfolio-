@@ -1,6 +1,15 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { FaInstagram, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 
+import colaKingThumb from "./assets/thumbnails/Cola king 1.png";
+import stopStressingThumb from "./assets/thumbnails/Stop stressing 2.png";
+import boostImmunityThumb from "./assets/thumbnails/Boost immunity 3.png";
+import neverAgainThumb from "./assets/thumbnails/Never again 4.png";
+import beggarMafiaThumb from "./assets/thumbnails/Beggar mafia 5.png";
+import whichOneThumb from "./assets/thumbnails/which one 6.png";
+import geoNetworkThumb from "./assets/thumbnails/Geo network 7.png";
+import helpThumb from "./assets/thumbnails/Help 8.png";
+
 /* ─────────────────────────────
    GLOBAL DESIGN SYSTEM
 ───────────────────────────── */
@@ -31,8 +40,8 @@ const GlobalStyles = () => (
       -moz-osx-font-smoothing: grayscale;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; width: 100%; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border-color: transparent; }
+    html { scroll-behavior: smooth; width: 100%; border: none; outline: none; }
     body {
       background: ${theme.bg};
       color: ${theme.text};
@@ -40,8 +49,10 @@ const GlobalStyles = () => (
       width: 100%;
       min-height: 100vh;
       overflow-x: hidden;
+      border: none;
+      outline: none;
     }
-    #root { width: 100%; }
+    #root { width: 100%; border: none; outline: none; }
     ::selection { background: rgba(59,130,246,0.25); color: #fff; }
     ::-webkit-scrollbar { width: 4px; background: ${theme.bg}; }
     ::-webkit-scrollbar-thumb { background: #1e2030; border-radius: 999px; }
@@ -213,12 +224,12 @@ const SectionHeading = ({ label, title, subtitle, center = true, titleStyle = {}
 /* ─────────────────────────────
    THUMBNAIL BUILDING BLOCKS
 ───────────────────────────── */
-const Thumb = ({ bg1, bg2, text, accent = "#fff", size = 180 }) => (
+const Thumb = ({ bg1, bg2, text, accent = "#fff", size = 180, img }) => (
   <div
     style={{
       width: size,
       height: size * (9 / 16),
-      background: `linear-gradient(135deg, ${bg1}, ${bg2})`,
+      background: img ? "#000" : `linear-gradient(135deg, ${bg1}, ${bg2})`,
       borderRadius: 12,
       display: "flex",
       alignItems: "center",
@@ -229,19 +240,27 @@ const Thumb = ({ bg1, bg2, text, accent = "#fff", size = 180 }) => (
       border: "1px solid rgba(255,255,255,0.06)",
     }}
   >
-    <span
-      style={{
-        fontSize: size * 0.065,
-        fontWeight: 900,
-        color: accent,
-        textAlign: "center",
-        padding: "0 12px",
-        lineHeight: 1.15,
-        textShadow: "0 2px 8px rgba(0,0,0,0.45)",
-      }}
-    >
-      {text}
-    </span>
+    {img ? (
+      <img
+        src={img}
+        alt={text || "Thumbnail"}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+      />
+    ) : (
+      <span
+        style={{
+          fontSize: size * 0.065,
+          fontWeight: 900,
+          color: accent,
+          textAlign: "center",
+          padding: "0 12px",
+          lineHeight: 1.15,
+          textShadow: "0 2px 8px rgba(0,0,0,0.45)",
+        }}
+      >
+        {text}
+      </span>
+    )}
   </div>
 );
 
@@ -578,17 +597,17 @@ const Hero = ({ onScrollTo }) => {
   const THUMB_W = isTablet ? 220 : 290;
 
   const leftThumbs = [
-    { bg1: "#0d0b2b", bg2: "#3d2fa0", text: "10 MONEY MISTAKES", accent: "#ffd700" },
-    { bg1: "#1a0533", bg2: "#7c3aed", text: "I TRIED 30 DAYS", accent: "#f0abfc" },
-    { bg1: "#001833", bg2: "#0052cc", text: "TRUTH ABOUT AI", accent: "#93c5fd" },
-    { bg1: "#0a1f0a", bg2: "#166534", text: "BUDGET SECRETS", accent: "#86efac" },
+    { bg1: "#0d0b2b", bg2: "#3d2fa0", text: "Cola King", accent: "#ffd700", img: colaKingThumb },
+    { bg1: "#1a0533", bg2: "#7c3aed", text: "Stop Stressing", accent: "#f0abfc", img: stopStressingThumb },
+    { bg1: "#001833", bg2: "#0052cc", text: "Boost Immunity", accent: "#93c5fd", img: boostImmunityThumb },
+    { bg1: "#0a1f0a", bg2: "#166534", text: "Never Again", accent: "#86efac", img: neverAgainThumb },
   ];
 
   const rightThumbs = [
-    { bg1: "#1c0a00", bg2: "#c2410c", text: "SOLO TRAVEL JAPAN", accent: "#fef3c7" },
-    { bg1: "#0a0a1f", bg2: "#1d4ed8", text: "WATCH BEFORE DELETE", accent: "#bfdbfe" },
-    { bg1: "#1a0a2e", bg2: "#6d28d9", text: "ALGORITHM HACK", accent: "#e9d5ff" },
-    { bg1: "#0a1f10", bg2: "#065f46", text: "EARN ₹1L ONLINE", accent: "#6ee7b7" },
+    { bg1: "#1c0a00", bg2: "#c2410c", text: "Beggar Mafia", accent: "#fef3c7", img: beggarMafiaThumb },
+    { bg1: "#0a0a1f", bg2: "#1d4ed8", text: "Which One", accent: "#bfdbfe", img: whichOneThumb },
+    { bg1: "#1a0a2e", bg2: "#6d28d9", text: "Geo Network", accent: "#e9d5ff", img: geoNetworkThumb },
+    { bg1: "#0a1f10", bg2: "#065f46", text: "Help", accent: "#6ee7b7", img: helpThumb },
   ];
 
   return (
@@ -840,15 +859,15 @@ const Intro = () => {
 
         {/* Meet the Designer — centered, no right card */}
         <Reveal delay={0.1}>
-          <div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center" }}>
+          <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
             <SectionLabel>Meet the Designer</SectionLabel>
-            <h2 style={{ fontSize: "clamp(32px, 3.8vw, 56px)", fontWeight: 900, lineHeight: 1.06, letterSpacing: "-1.5px", marginBottom: 24 }}>
+            <h2 style={{ fontSize: "clamp(34px, 4.4vw, 64px)", fontWeight: 900, lineHeight: 1.06, letterSpacing: "-1.5px", marginBottom: 28 }}>
               Yo, I'm Sandeep 👋
             </h2>
-            <p style={{ fontSize: 17, color: "rgba(255,255,255,0.62)", lineHeight: 1.85, marginBottom: 16 }}>
+            <p style={{ fontSize: 19, color: "rgba(255,255,255,0.64)", lineHeight: 1.85, marginBottom: 18 }}>
               I help YouTube creators strategize and package their videos for clicks.
             </p>
-            <p style={{ fontSize: 15, color: "rgba(255,255,255,0.38)", lineHeight: 1.9, marginBottom: 40, maxWidth: 520, margin: "0 auto 40px" }}>
+            <p style={{ fontSize: 16.5, color: "rgba(255,255,255,0.40)", lineHeight: 1.9, marginBottom: 44, maxWidth: 620, margin: "0 auto 44px" }}>
               At <strong style={{ color: "#93c5fd" }}>VisualDives</strong>, every design is built around understanding the video, the audience, and what makes people stop scrolling and pay attention.
             </p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
@@ -929,12 +948,12 @@ const HowIWork = () => {
   ];
 
   return (
-    <section id="process" style={{ width: "100%", padding: isMobile ? "84px 20px" : "110px 8%", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+    <section id="process" style={{ width: "100%", padding: isMobile ? "84px 20px" : "120px 8%", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
+      <div style={{ maxWidth: 1320, margin: "0 auto" }}>
         <Reveal>
-          <div style={{ textAlign: "center", marginBottom: 80 }}>
+          <div style={{ textAlign: "center", marginBottom: 84 }}>
             <SectionLabel>The Method</SectionLabel>
-            <h2 style={{ fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 900, letterSpacing: "-1px" }}>How I Work</h2>
+            <h2 style={{ fontSize: "clamp(30px, 4.6vw, 58px)", fontWeight: 900, letterSpacing: "-1px" }}>How I Work</h2>
           </div>
         </Reveal>
 
@@ -942,7 +961,7 @@ const HowIWork = () => {
           style={{
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(5, 1fr)",
-            gap: isMobile ? 24 : 24,
+            gap: isMobile ? 24 : 28,
             position: "relative",
           }}
         >
@@ -969,7 +988,7 @@ const HowIWork = () => {
                   textAlign: "center",
                   position: "relative",
                   zIndex: 1,
-                  padding: "16px 14px 18px",
+                  padding: "20px 16px 22px",
                   borderRadius: 20,
                   background: active ? "rgba(255,255,255,0.035)" : "rgba(255,255,255,0.01)",
                   border: `1px solid ${active ? "rgba(59,130,246,0.20)" : "rgba(255,255,255,0.04)"}`,
@@ -982,9 +1001,9 @@ const HowIWork = () => {
               >
                 <div
                   style={{
-                    width: 62,
-                    height: 62,
-                    borderRadius: 18,
+                    width: 68,
+                    height: 68,
+                    borderRadius: 19,
                     background: active ? "linear-gradient(135deg,#2f74ff,#7c3aed)" : "linear-gradient(135deg,#1e3a5f,#2563eb)",
                     display: "flex",
                     alignItems: "center",
@@ -1022,8 +1041,8 @@ const HowIWork = () => {
                   }}
                 />
 
-                <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 12, letterSpacing: "-0.3px" }}>{title}</div>
-                <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.42)", lineHeight: 1.8 }}>{desc}</div>
+                <div style={{ fontWeight: 800, fontSize: 17.5, marginBottom: 13, letterSpacing: "-0.3px" }}>{title}</div>
+                <div style={{ fontSize: 14.5, color: "rgba(255,255,255,0.42)", lineHeight: 1.8 }}>{desc}</div>
               </div>
             );
           })}
@@ -1066,12 +1085,12 @@ const MyServices = () => {
   ];
 
   return (
-    <section id="services" style={{ width: "100%", padding: isMobile ? "84px 20px" : "100px 8%" }}>
-      <div style={{ maxWidth: 860, margin: "0 auto" }}>
+    <section id="services" style={{ width: "100%", padding: isMobile ? "84px 20px" : "110px 8%" }}>
+      <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         <Reveal>
-          <div style={{ textAlign: "center", marginBottom: 72 }}>
+          <div style={{ textAlign: "center", marginBottom: 76 }}>
             <SectionLabel>What I Offer</SectionLabel>
-            <h2 style={{ fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 900, letterSpacing: "-1px", marginBottom: 14 }}>My Services</h2>
+            <h2 style={{ fontSize: "clamp(30px, 4.4vw, 56px)", fontWeight: 900, letterSpacing: "-1px", marginBottom: 14 }}>My Services</h2>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, color: theme.textMuted, fontSize: 13 }}>
               <span style={{ letterSpacing: 2 }}>Scroll</span>
               <span style={{ display: "inline-block", animation: "scrollBounce 1.5s ease-in-out infinite" }}>↓</span>
@@ -1086,20 +1105,20 @@ const MyServices = () => {
                 background: s.bg,
                 border: `1px solid ${s.accent}18`,
                 borderRadius: 24,
-                padding: isMobile ? "28px 24px" : "48px 52px",
+                padding: isMobile ? "30px 26px" : "56px 60px",
                 display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 100px",
-                gap: isMobile ? 22 : 40,
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 110px",
+                gap: isMobile ? 22 : 44,
                 alignItems: "center",
                 boxShadow: "0 28px 70px rgba(0,0,0,0.62)",
               }}
             >
               <div>
-                <div style={{ fontSize: 11, color: s.accent, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", marginBottom: 14 }}>{s.num}</div>
-                <h3 style={{ fontSize: "clamp(22px,2.5vw,32px)", fontWeight: 900, color: "#fff", marginBottom: 18, letterSpacing: "-0.5px" }}>{s.title}</h3>
-                <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: 1.85 }}>{s.desc}</p>
+                <div style={{ fontSize: 11.5, color: s.accent, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", marginBottom: 16 }}>{s.num}</div>
+                <h3 style={{ fontSize: "clamp(24px,2.8vw,36px)", fontWeight: 900, color: "#fff", marginBottom: 20, letterSpacing: "-0.5px" }}>{s.title}</h3>
+                <p style={{ fontSize: 17, color: "rgba(255,255,255,0.46)", lineHeight: 1.88, maxWidth: 600 }}>{s.desc}</p>
               </div>
-              <div style={{ fontSize: isMobile ? 54 : 72, textAlign: isMobile ? "left" : "center", opacity: 0.8 }}>{s.icon}</div>
+              <div style={{ fontSize: isMobile ? 56 : 80, textAlign: isMobile ? "left" : "center", opacity: 0.8 }}>{s.icon}</div>
             </div>
           </div>
         ))}
@@ -1115,21 +1134,21 @@ const About = () => {
   const { isMobile } = useViewport();
 
   return (
-    <section id="about" style={{ width: "100%", padding: isMobile ? "84px 20px" : "110px 8%", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
-      <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
+    <section id="about" style={{ width: "100%", padding: isMobile ? "84px 20px" : "120px 8%", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
+      <div style={{ maxWidth: 840, margin: "0 auto", textAlign: "center" }}>
         <Reveal>
           <SectionLabel>About</SectionLabel>
-          <h2 style={{ fontSize: "clamp(36px,5vw,72px)", fontWeight: 900, letterSpacing: "-2px", lineHeight: 1, marginBottom: 40 }}>
+          <h2 style={{ fontSize: "clamp(38px,5.6vw,80px)", fontWeight: 900, letterSpacing: "-2px", lineHeight: 1, marginBottom: 46 }}>
             Visual<span style={{ background: "linear-gradient(90deg,#3b82f6,#8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Dives</span>
           </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
             {[
               { t: "Yo, I'm Sandeep. I help YouTube creators strategize and package their videos for clicks.", big: true },
               { t: "At VisualDives, I focus on creating thumbnails that do more than look good. Every design is built around understanding the video, the audience, and what makes people stop scrolling and pay attention.", big: false },
               { t: "I believe great thumbnails come from a combination of strategy, psychology, and strong visual communication. That's why I spend time understanding the story, message, and viewer before jumping into design.", big: false },
               { t: "My goal is simple: create thumbnails that stand out, communicate the idea instantly, and give creators the best possible chance of earning the click.", big: false },
             ].map(({ t, big }, i) => (
-              <p key={i} style={{ fontSize: big ? 18 : 15, fontWeight: big ? 700 : 400, color: big ? "rgba(255,255,255,0.84)" : "rgba(255,255,255,0.46)", lineHeight: 1.9, maxWidth: big ? "none" : 600, margin: "0 auto" }}>
+              <p key={i} style={{ fontSize: big ? 20 : 16.5, fontWeight: big ? 700 : 400, color: big ? "rgba(255,255,255,0.86)" : "rgba(255,255,255,0.48)", lineHeight: 1.9, maxWidth: big ? "none" : 680, margin: "0 auto" }}>
                 {t}
               </p>
             ))}
@@ -1210,10 +1229,10 @@ const FAQ = () => {
   const { isMobile } = useViewport();
 
   return (
-    <section style={{ width: "100%", padding: isMobile ? "72px 20px 96px" : "80px 8% 100px", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
-      <div style={{ maxWidth: 760, margin: "0 auto" }}>
+    <section style={{ width: "100%", padding: isMobile ? "72px 20px 96px" : "92px 8% 110px", background: theme.bgAlt, borderTop: `1px solid ${theme.line}` }}>
+      <div style={{ maxWidth: 880, margin: "0 auto" }}>
         <Reveal>
-          <h2 style={{ fontSize: "clamp(26px,3.5vw,44px)", fontWeight: 900, letterSpacing: "-0.5px", marginBottom: 52, textAlign: "center" }}>
+          <h2 style={{ fontSize: "clamp(28px,4vw,50px)", fontWeight: 900, letterSpacing: "-0.5px", marginBottom: 58, textAlign: "center" }}>
             Most common questions.
           </h2>
         </Reveal>
@@ -1221,7 +1240,7 @@ const FAQ = () => {
           <div
             key={q}
             onClick={() => setOpen(open === i ? null : i)}
-            style={{ borderBottom: `1px solid ${theme.line}`, padding: "20px 0", cursor: "pointer" }}
+            style={{ borderBottom: `1px solid ${theme.line}`, padding: "24px 0", cursor: "pointer" }}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
@@ -1230,11 +1249,11 @@ const FAQ = () => {
             aria-expanded={open === i}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
-              <div style={{ fontSize: 16, fontWeight: 600, color: open === i ? "#3b82f6" : "#fff", transition: "color 0.2s" }}>{q}</div>
-              <div style={{ fontSize: 20, color: "rgba(255,255,255,0.25)", transform: open === i ? "rotate(45deg)" : "none", transition: "transform 0.2s" }}>+</div>
+              <div style={{ fontSize: 17.5, fontWeight: 600, color: open === i ? "#3b82f6" : "#fff", transition: "color 0.2s" }}>{q}</div>
+              <div style={{ fontSize: 21, color: "rgba(255,255,255,0.25)", transform: open === i ? "rotate(45deg)" : "none", transition: "transform 0.2s" }}>+</div>
             </div>
             {open === i ? (
-              <p style={{ marginTop: 14, color: "rgba(255,255,255,0.4)", fontSize: 15, lineHeight: 1.8 }}>{a}</p>
+              <p style={{ marginTop: 16, color: "rgba(255,255,255,0.4)", fontSize: 16, lineHeight: 1.85, maxWidth: 760 }}>{a}</p>
             ) : null}
           </div>
         ))}
@@ -1306,7 +1325,7 @@ export default function App() {
   return (
     <>
       <GlobalStyles />
-      <div style={{ width: "100%", background: theme.bg, color: theme.text, fontFamily: "'Inter', system-ui, sans-serif", maxWidth: "100vw" }}>
+      <div style={{ width: "100%", background: theme.bg, color: theme.text, fontFamily: "'Inter', system-ui, sans-serif", maxWidth: "100vw", border: "none", outline: "none" }}>
         <nav
           style={{
             position: "fixed",
@@ -1314,7 +1333,7 @@ export default function App() {
             left: 0,
             right: 0,
             zIndex: 1000,
-            height: 66,
+            height: isMobile ? 66 : 84,
             padding: isMobile ? "0 20px" : "0 8%",
             display: "flex",
             alignItems: "center",
@@ -1326,13 +1345,13 @@ export default function App() {
             transition: "all 0.35s cubic-bezier(.22,.61,.36,1)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-            <Logo size={34} />
-            <span style={{ fontWeight: 900, fontSize: 15, letterSpacing: 1.5, textTransform: "uppercase" }}>VisualDives</span>
+          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 10 : 13, flexShrink: 0 }}>
+            <Logo size={isMobile ? 34 : 42} />
+            <span style={{ fontWeight: 900, fontSize: isMobile ? 15 : 17, letterSpacing: 1.5, textTransform: "uppercase" }}>VisualDives</span>
           </div>
 
           {!isMobile ? (
-            <div style={{ display: "flex", gap: 40 }}>
+            <div style={{ display: "flex", gap: 44 }}>
               {[
                 ["Work", "work"],
                 ["Process", "process"],
@@ -1343,7 +1362,7 @@ export default function App() {
                   key={id}
                   type="button"
                   onClick={() => scrollTo(id)}
-                  style={{ background: "none", border: "none", color: "rgba(255,255,255,0.48)", fontSize: 14, fontWeight: 500, cursor: "pointer", transition: "color 0.2s", letterSpacing: "0.01em" }}
+                  style={{ background: "none", border: "none", color: "rgba(255,255,255,0.48)", fontSize: 15, fontWeight: 500, cursor: "pointer", transition: "color 0.2s", letterSpacing: "0.01em" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.48)")}
                 >
@@ -1358,7 +1377,7 @@ export default function App() {
           )}
 
           {!isMobile ? (
-            <GhostButton compact onClick={() => scrollTo("contact")}>
+            <GhostButton compact={false} onClick={() => scrollTo("contact")} style={{ padding: "12px 26px", fontSize: 14 }}>
               Work With Me
             </GhostButton>
           ) : null}
