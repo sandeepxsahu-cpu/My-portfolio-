@@ -367,32 +367,56 @@ const Slider = ({ before, after }) => {
     const r = ref.current.getBoundingClientRect();
     if (!r.width) return;
     const next = ((clientX - r.left) / r.width) * 100;
-    setPos(Math.min(96, Math.max(4, next)));
+    setPos(Math.min(100, Math.max(0, next)));
   }, []);
 
+  const stopDragging = useCallback(() => {
+    dragging.current = false;
+  }, []);
+
+  const startDragging = useCallback((e) => {
+    dragging.current = true;
+    // Immediately update position to where the user clicked/tapped
+    const clientX = e.touches?.[0]?.clientX ?? e.clientX;
+    if (clientX != null) move(clientX);
+  }, [move]);
+
   useEffect(() => {
-    const up = () => { dragging.current = false; };
     const mm = (e) => move(e.clientX);
     const tm = (e) => { if (e.touches?.[0]) move(e.touches[0].clientX); };
 
-    window.addEventListener("mouseup", up);
+    // Any of these should immediately release the drag, no matter which
+    // slider instance is currently active.
+    window.addEventListener("mouseup", stopDragging);
     window.addEventListener("mousemove", mm);
-    window.addEventListener("touchend", up);
+    window.addEventListener("touchend", stopDragging);
+    window.addEventListener("touchcancel", stopDragging);
+    window.addEventListener("pointerup", stopDragging);
+    window.addEventListener("pointercancel", stopDragging);
     window.addEventListener("touchmove", tm, { passive: true });
+    // Scrolling the page (e.g. moving to another card) must stop the drag too.
+    window.addEventListener("scroll", stopDragging, { passive: true, capture: true });
+    window.addEventListener("blur", stopDragging);
 
     return () => {
-      window.removeEventListener("mouseup", up);
+      window.removeEventListener("mouseup", stopDragging);
       window.removeEventListener("mousemove", mm);
-      window.removeEventListener("touchend", up);
+      window.removeEventListener("touchend", stopDragging);
+      window.removeEventListener("touchcancel", stopDragging);
+      window.removeEventListener("pointerup", stopDragging);
+      window.removeEventListener("pointercancel", stopDragging);
       window.removeEventListener("touchmove", tm);
+      window.removeEventListener("scroll", stopDragging, { capture: true });
+      window.removeEventListener("blur", stopDragging);
     };
-  }, [move]);
+  }, [move, stopDragging]);
 
   return (
     <div
       ref={ref}
-      onMouseDown={() => { dragging.current = true; }}
-      onTouchStart={() => { dragging.current = true; }}
+      onMouseDown={startDragging}
+      onTouchStart={startDragging}
+      onMouseLeave={stopDragging}
       style={{
         position: "relative",
         width: "100%",
@@ -401,11 +425,31 @@ const Slider = ({ before, after }) => {
         overflow: "hidden",
         cursor: "ew-resize",
         userSelect: "none",
+        WebkitUserSelect: "none",
         touchAction: "none",
       }}
     >
-      <div style={{ position: "absolute", inset: 0 }}>{after}</div>
-      <div style={{ position: "absolute", inset: 0, clipPath: `inset(0 ${100 - pos}% 0 0)` }}>{before}</div>
+      {/* Base layer: AFTER image, always full size, never moves */}
+      <div style={{ position: "absolute", inset: 0, width: "100%", height: "100%", userSelect: "none", pointerEvents: "none" }} draggable={false}>
+        {after}
+      </div>
+      {/* Top layer: BEFORE image, clipped to reveal only up to the handle position.
+          The image itself is always rendered at full size (inset:0) — only the
+          clip-path changes, so the image never shifts or scales during drag. */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          clipPath: `inset(0 ${100 - pos}% 0 0)`,
+          userSelect: "none",
+          pointerEvents: "none",
+        }}
+        draggable={false}
+      >
+        {before}
+      </div>
       <div
         style={{
           position: "absolute",
@@ -915,12 +959,12 @@ const Intro = () => {
    FEATURED WORK DATA
 ───────────────────────────── */
 const workData = [
-  { title: "From Invisible to Viral", niche: "Gaming", stat: "+312% CTR", hook: "Curiosity Gap + Emotion", b1: "#0f0c29", b2: "#302b63", text: "10 MONEY TIPS", accent: "#ffd700", dull: "10 MONEY TIPS", before: before1, after: after1 },
-  { title: "The Comeback Story", niche: "Personal Finance", stat: "2.4M Views", hook: "Transformation Narrative", b1: "#7f1d1d", b2: "#dc2626", text: "MY COMEBACK STORY", accent: "#fef2f2", dull: "MY STORY", before: before2, after: after2 },
-  { title: "The Authority Play", niche: "Education", stat: "50K→500K", hook: "Authority + Social Proof", b1: "#1e3a5f", b2: "#2563eb", text: "LEARN THIS NOW", accent: "#dbeafe", dull: "LEARN THIS", before: before3, after: after3 },
-  { title: "The Reaction Magnet", niche: "Entertainment", stat: "4.1M Impressions", hook: "Familiarity + Humor", b1: "#4a044e", b2: "#9333ea", text: "YOU WON'T BELIEVE 😱", accent: "#f5d0fe", dull: "YOU WON'T BELIEVE", before: before4, after: after4 },
-  { title: "The Contrast Hook", niche: "Fitness", stat: "+280% CTR", hook: "Before/After Narrative", b1: "#14532d", b2: "#16a34a", text: "30 DAY BODY CHANGE", accent: "#dcfce7", dull: "MY FITNESS JOURNEY", before: before5, after: after5 },
-  { title: "Open Loop Mastery", niche: "Tech", stat: "1.8M Views", hook: "Open Loop + Mystery", b1: "#292524", b2: "#57534e", text: "THEY LIED ABOUT AI", accent: "#fef3c7", dull: "THE TRUTH ABOUT AI", before: before6, after: after6 },
+  { title: "From Invisible to Viral", niche: "Business Documentary", stat: "+18% CTR", hook: "Unknown Man + Famous Brand", b1: "#0f0c29", b2: "#302b63", text: "10 MONEY TIPS", accent: "#ffd700", dull: "10 MONEY TIPS", before: before1, after: after1 },
+  { title: "Exposing the Beggar Mafia", niche: "Documentary", stat: "1.7M Views", hook: "Belief Reversal + Shock", b1: "#7f1d1d", b2: "#dc2626", text: "MY COMEBACK STORY", accent: "#fef2f2", dull: "MY STORY", before: before2, after: after2 },
+  { title: "Worst Flight Experience Ever", niche: "Travel / Vlog", stat: "50K→500K (+20% CTR)", hook: "Fear + Curiosity", b1: "#1e3a5f", b2: "#2563eb", text: "LEARN THIS NOW", accent: "#dbeafe", dull: "LEARN THIS", before: before3, after: after3 },
+  { title: "Boost Immunity Naturally", niche: "Health", stat: "985K Views", hook: "Healthy Foods + Doctor", b1: "#4a044e", b2: "#9333ea", text: "YOU WON'T BELIEVE 😱", accent: "#f5d0fe", dull: "YOU WON'T BELIEVE", before: before4, after: after4 },
+  { title: "The Impossible Scenario", niche: "Entertainment", stat: "+15% CTR", hook: "Curiosity Trap", b1: "#14532d", b2: "#16a34a", text: "30 DAY BODY CHANGE", accent: "#dcfce7", dull: "MY FITNESS JOURNEY", before: before5, after: after5 },
+  { title: "The Power Clash", niche: "Geopolitics", stat: "1.3M Views", hook: "The Conflict Escalation", b1: "#292524", b2: "#57534e", text: "THEY LIED ABOUT AI", accent: "#fef3c7", dull: "THE TRUTH ABOUT AI", before: before6, after: after6 },
 ];
 
 const FeaturedWork = () => {
@@ -1222,7 +1266,7 @@ const Testimonials = () => {
                 <div style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", width: 9, height: 9, borderRadius: "50%", background: t.color, boxShadow: `0 0 16px ${t.color}` }} />
                 <div style={{ display: "flex", gap: 2, marginBottom: 16 }}>{Array(5).fill(0).map((_, j) => <span key={j} style={{ color: "#fbbf24", fontSize: 13 }}>★</span>)}</div>
                 <p style={{ fontSize: 17, color: "rgba(255,255,255,0.68)", lineHeight: 1.85, marginBottom: 26, fontStyle: "italic" }}>"{t.text}"</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div style={{ width: 44, height: 44, borderRadius: "50%", background: t.color, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 17 }}>{t.name[0]}</div>
                   <div>
                     <div style={{ fontWeight: 800, fontSize: 15 }}>{t.name}</div>
