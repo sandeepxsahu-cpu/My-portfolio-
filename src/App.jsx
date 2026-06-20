@@ -10,6 +10,19 @@ import whichOneThumb from "./assets/thumbnails/which one 6.png";
 import geoNetworkThumb from "./assets/thumbnails/Geo network 7.png";
 import helpThumb from "./assets/thumbnails/Help 8.png";
 
+import before1 from "./assets/Featured/Before1.png";
+import after1 from "./assets/Featured/After1.png";
+import before2 from "./assets/Featured/Before2.png";
+import after2 from "./assets/Featured/After2.png";
+import before3 from "./assets/Featured/Before3.png";
+import after3 from "./assets/Featured/After3.png";
+import before4 from "./assets/Featured/Before4.png";
+import after4 from "./assets/Featured/After4.png";
+import before5 from "./assets/Featured/Before5.png";
+import after5 from "./assets/Featured/After5.png";
+import before6 from "./assets/Featured/Before6.png";
+import after6 from "./assets/Featured/After6.png";
+
 /* ─────────────────────────────
    GLOBAL DESIGN SYSTEM
 ───────────────────────────── */
@@ -67,6 +80,18 @@ const GlobalStyles = () => (
     }
 
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+    @keyframes heroSlideLeft {
+      0%   { opacity: 0; transform: translateX(-64px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes heroSlideRight {
+      0%   { opacity: 0; transform: translateX(64px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes heroCenterIn {
+      0%   { opacity: 0; transform: scale(0.97) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
     @keyframes scrollBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
     @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
     @keyframes softFloat { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-6px)} }
@@ -264,38 +289,43 @@ const Thumb = ({ bg1, bg2, text, accent = "#fff", size = 180, img }) => (
   </div>
 );
 
-const DullThumb = ({ text = "YOUR VIDEO TITLE" }) => (
+const DullThumb = ({ text = "YOUR VIDEO TITLE", img }) => (
   <div
     style={{
       width: "100%",
       aspectRatio: "16/9",
-      background: "linear-gradient(135deg, #141414, #1e1e1e)",
+      background: img ? "#000" : "linear-gradient(135deg, #141414, #1e1e1e)",
       borderRadius: 14,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
+      overflow: "hidden",
     }}
   >
-    <span
-      style={{
-        fontSize: 14,
-        fontWeight: 700,
-        color: "rgba(255,255,255,0.2)",
-        textAlign: "center",
-        padding: "0 16px",
-      }}
-    >
-      {text}
-    </span>
+    {img ? (
+      <img src={img} alt={text} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+    ) : (
+      <span
+        style={{
+          fontSize: 14,
+          fontWeight: 700,
+          color: "rgba(255,255,255,0.2)",
+          textAlign: "center",
+          padding: "0 16px",
+        }}
+      >
+        {text}
+      </span>
+    )}
   </div>
 );
 
-const VividThumb = ({ bg1, bg2, text, accent = "#fff" }) => (
+const VividThumb = ({ bg1, bg2, text, accent = "#fff", img }) => (
   <div
     style={{
       width: "100%",
       aspectRatio: "16/9",
-      background: `linear-gradient(135deg, ${bg1}, ${bg2})`,
+      background: img ? "#000" : `linear-gradient(135deg, ${bg1}, ${bg2})`,
       borderRadius: 14,
       display: "flex",
       alignItems: "center",
@@ -304,19 +334,23 @@ const VividThumb = ({ bg1, bg2, text, accent = "#fff" }) => (
       boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
     }}
   >
-    <span
-      style={{
-        fontSize: 15,
-        fontWeight: 900,
-        color: accent,
-        textAlign: "center",
-        padding: "0 16px",
-        textShadow: "0 2px 10px rgba(0,0,0,0.6)",
-        lineHeight: 1.15,
-      }}
-    >
-      {text}
-    </span>
+    {img ? (
+      <img src={img} alt={text} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+    ) : (
+      <span
+        style={{
+          fontSize: 15,
+          fontWeight: 900,
+          color: accent,
+          textAlign: "center",
+          padding: "0 16px",
+          textShadow: "0 2px 10px rgba(0,0,0,0.6)",
+          lineHeight: 1.15,
+        }}
+      >
+        {text}
+      </span>
+    )}
   </div>
 );
 
@@ -523,30 +557,27 @@ const GhostButton = ({ children, onClick, style = {}, href, variant = "primary",
    PARTICLE BACKGROUND
 ───────────────────────────── */
 const ParticleBackground = () => {
-  const particles = [
-    { left: "5%",  top: "8%",  sz: "2px",  op: "0.55", dur: "14s", delay: "-3s",  drift: "12px",  glow: "3px" },
-    { left: "12%", top: "42%", sz: "1.5px",op: "0.40", dur: "18s", delay: "-9s",  drift: "-8px",  glow: "2px" },
-    { left: "19%", top: "15%", sz: "2.5px",op: "0.62", dur: "11s", delay: "-5s",  drift: "18px",  glow: "4px" },
-    { left: "27%", top: "65%", sz: "1px",  op: "0.32", dur: "20s", delay: "-12s", drift: "-14px", glow: "2px" },
-    { left: "34%", top: "5%",  sz: "2px",  op: "0.50", dur: "15s", delay: "-7s",  drift: "10px",  glow: "3px" },
-    { left: "41%", top: "30%", sz: "3px",  op: "0.45", dur: "12s", delay: "-2s",  drift: "-20px", glow: "5px" },
-    { left: "48%", top: "55%", sz: "1.5px",op: "0.58", dur: "17s", delay: "-10s", drift: "16px",  glow: "2px" },
-    { left: "55%", top: "10%", sz: "2px",  op: "0.38", dur: "13s", delay: "-6s",  drift: "-10px", glow: "3px" },
-    { left: "62%", top: "70%", sz: "1px",  op: "0.28", dur: "22s", delay: "-15s", drift: "6px",   glow: "2px" },
-    { left: "68%", top: "22%", sz: "2.5px",op: "0.60", dur: "10s", delay: "-4s",  drift: "-16px", glow: "4px" },
-    { left: "74%", top: "48%", sz: "1.5px",op: "0.35", dur: "19s", delay: "-11s", drift: "20px",  glow: "2px" },
-    { left: "80%", top: "8%",  sz: "2px",  op: "0.52", dur: "16s", delay: "-8s",  drift: "-12px", glow: "3px" },
-    { left: "86%", top: "60%", sz: "1px",  op: "0.25", dur: "24s", delay: "-1s",  drift: "8px",   glow: "2px" },
-    { left: "92%", top: "18%", sz: "2.5px",op: "0.64", dur: "9s",  delay: "-6s",  drift: "-18px", glow: "4px" },
-    { left: "3%",  top: "75%", sz: "1.5px",op: "0.42", dur: "21s", delay: "-14s", drift: "14px",  glow: "2px" },
-    { left: "16%", top: "85%", sz: "2px",  op: "0.48", dur: "13.5s",delay: "-3.5s",drift: "-10px", glow: "3px" },
-    { left: "23%", top: "92%", sz: "1px",  op: "0.30", dur: "17.5s",delay: "-9.5s",drift: "12px",  glow: "2px" },
-    { left: "38%", top: "80%", sz: "2.5px",op: "0.56", dur: "11.5s",delay: "-5.5s",drift: "-16px", glow: "4px" },
-    { left: "58%", top: "88%", sz: "1.5px",op: "0.36", dur: "19.5s",delay: "-13s", drift: "10px",  glow: "2px" },
-    { left: "71%", top: "82%", sz: "2px",  op: "0.50", dur: "15.5s",delay: "-2.5s",drift: "-14px", glow: "3px" },
-    { left: "89%", top: "78%", sz: "1px",  op: "0.27", dur: "23s",  delay: "-16s", drift: "8px",   glow: "2px" },
-    { left: "97%", top: "40%", sz: "2px",  op: "0.46", dur: "14.5s",delay: "-7.5s",drift: "-12px", glow: "3px" },
-  ];
+  // Deterministic pseudo-random generator (no Math.random so SSR/re-renders stay stable)
+  const seeded = (seed) => {
+    const x = Math.sin(seed * 9301 + 49297) * 233280;
+    return x - Math.floor(x);
+  };
+
+  const particles = Array.from({ length: 46 }, (_, i) => {
+    const col = i % 8;
+    const row = Math.floor(i / 8);
+    const jitterX = (seeded(i * 3.1) - 0.5) * 9;
+    const jitterY = (seeded(i * 5.7) - 0.5) * 9;
+    const left = `${Math.min(97, Math.max(2, col * 13 + 4 + jitterX)).toFixed(1)}%`;
+    const top = `${Math.min(94, Math.max(3, row * 16 + 6 + jitterY)).toFixed(1)}%`;
+    const sz = [1, 1, 1.5, 1.5, 2, 2, 2.5, 3][i % 8] + "px";
+    const op = (0.22 + seeded(i * 7.3) * 0.42).toFixed(2);
+    const dur = (9 + seeded(i * 2.4) * 15).toFixed(1) + "s";
+    const delay = -(seeded(i * 4.6) * 22).toFixed(1) + "s";
+    const drift = (seeded(i * 6.2) > 0.5 ? "" : "-") + (6 + seeded(i * 8.8) * 14).toFixed(0) + "px";
+    const glow = [2, 2, 3, 3, 4, 4, 5, 5][i % 8] + "px";
+    return { left, top, sz, op, dur, delay, drift, glow };
+  });
 
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
@@ -639,21 +670,19 @@ const Hero = ({ onScrollTo }) => {
       <ParticleBackground />
 
       {!isMobile ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 14,
-            padding: "0 0 0 3vw",
-            transform: `perspective(1900px) rotateY(${35 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
-            transition: "transform 0.15s ease-out",
-            maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-            flexShrink: 0,
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
+        <div style={{ animation: "heroSlideLeft 1.1s cubic-bezier(.16,.84,.44,1) both", flexShrink: 0, position: "relative", zIndex: 1 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 14,
+              padding: "0 0 0 3vw",
+              transform: `perspective(1900px) rotateY(${35 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
+              transition: "transform 0.15s ease-out",
+              maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+            }}
+          >
           {leftThumbs.map((t, i) => (
             <div
               key={i}
@@ -665,22 +694,21 @@ const Hero = ({ onScrollTo }) => {
               <Thumb {...t} size={THUMB_W} />
             </div>
           ))}
+          </div>
         </div>
       ) : null}
 
-      <div
-        style={{
-          textAlign: "center",
-          flex: 1,
-          padding: isMobile ? "0" : "0 2vw",
-          transform: isMobile ? "none" : `translateY(${mouse.y * -5}px)`,
-          transition: "transform 0.2s ease-out",
-          position: "relative",
-          zIndex: 2,
-          maxWidth: isMobile ? 760 : 900,
-          margin: "0 auto",
-        }}
-      >
+      <div style={{ flex: 1, position: "relative", zIndex: 2, animation: "heroCenterIn 1.1s cubic-bezier(.16,.84,.44,1) both" }}>
+        <div
+          style={{
+            textAlign: "center",
+            padding: isMobile ? "0" : "0 2vw",
+            transform: isMobile ? "none" : `translateY(${mouse.y * -5}px)`,
+            transition: "transform 0.2s ease-out",
+            maxWidth: isMobile ? 760 : 900,
+            margin: "0 auto",
+          }}
+        >
         <div
           style={{
             display: "inline-flex",
@@ -738,24 +766,23 @@ const Hero = ({ onScrollTo }) => {
           <span style={{ fontSize: 10, color: "rgba(255,255,255,0.2)", letterSpacing: 3, textTransform: "uppercase" }}>Scroll</span>
           <div style={{ width: 1, height: 36, background: "linear-gradient(to bottom, rgba(255,255,255,0.15), transparent)", animation: "scrollBounce 2s ease-in-out infinite" }} />
         </div>
+        </div>
       </div>
 
       {!isMobile ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 14,
-            padding: "0 3vw 0 0",
-            transform: `perspective(1900px) rotateY(${-35 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
-            transition: "transform 0.15s ease-out",
-            maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-            flexShrink: 0,
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
+        <div style={{ animation: "heroSlideRight 1.1s cubic-bezier(.16,.84,.44,1) both", flexShrink: 0, position: "relative", zIndex: 1 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 14,
+              padding: "0 3vw 0 0",
+              transform: `perspective(1900px) rotateY(${-35 + mouse.x * 7}deg) rotateX(${mouse.y * -6}deg)`,
+              transition: "transform 0.15s ease-out",
+              maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+            }}
+          >
           {rightThumbs.map((t, i) => (
             <div
               key={i}
@@ -767,6 +794,7 @@ const Hero = ({ onScrollTo }) => {
               <Thumb {...t} size={THUMB_W} />
             </div>
           ))}
+          </div>
         </div>
       ) : null}
     </section>
@@ -887,12 +915,12 @@ const Intro = () => {
    FEATURED WORK DATA
 ───────────────────────────── */
 const workData = [
-  { title: "From Invisible to Viral", niche: "Gaming", stat: "+312% CTR", hook: "Curiosity Gap + Emotion", b1: "#0f0c29", b2: "#302b63", text: "10 MONEY TIPS", accent: "#ffd700", dull: "10 MONEY TIPS" },
-  { title: "The Comeback Story", niche: "Personal Finance", stat: "2.4M Views", hook: "Transformation Narrative", b1: "#7f1d1d", b2: "#dc2626", text: "MY COMEBACK STORY", accent: "#fef2f2", dull: "MY STORY" },
-  { title: "The Authority Play", niche: "Education", stat: "50K→500K", hook: "Authority + Social Proof", b1: "#1e3a5f", b2: "#2563eb", text: "LEARN THIS NOW", accent: "#dbeafe", dull: "LEARN THIS" },
-  { title: "The Reaction Magnet", niche: "Entertainment", stat: "4.1M Impressions", hook: "Familiarity + Humor", b1: "#4a044e", b2: "#9333ea", text: "YOU WON'T BELIEVE 😱", accent: "#f5d0fe", dull: "YOU WON'T BELIEVE" },
-  { title: "The Contrast Hook", niche: "Fitness", stat: "+280% CTR", hook: "Before/After Narrative", b1: "#14532d", b2: "#16a34a", text: "30 DAY BODY CHANGE", accent: "#dcfce7", dull: "MY FITNESS JOURNEY" },
-  { title: "Open Loop Mastery", niche: "Tech", stat: "1.8M Views", hook: "Open Loop + Mystery", b1: "#292524", b2: "#57534e", text: "THEY LIED ABOUT AI", accent: "#fef3c7", dull: "THE TRUTH ABOUT AI" },
+  { title: "From Invisible to Viral", niche: "Gaming", stat: "+312% CTR", hook: "Curiosity Gap + Emotion", b1: "#0f0c29", b2: "#302b63", text: "10 MONEY TIPS", accent: "#ffd700", dull: "10 MONEY TIPS", before: before1, after: after1 },
+  { title: "The Comeback Story", niche: "Personal Finance", stat: "2.4M Views", hook: "Transformation Narrative", b1: "#7f1d1d", b2: "#dc2626", text: "MY COMEBACK STORY", accent: "#fef2f2", dull: "MY STORY", before: before2, after: after2 },
+  { title: "The Authority Play", niche: "Education", stat: "50K→500K", hook: "Authority + Social Proof", b1: "#1e3a5f", b2: "#2563eb", text: "LEARN THIS NOW", accent: "#dbeafe", dull: "LEARN THIS", before: before3, after: after3 },
+  { title: "The Reaction Magnet", niche: "Entertainment", stat: "4.1M Impressions", hook: "Familiarity + Humor", b1: "#4a044e", b2: "#9333ea", text: "YOU WON'T BELIEVE 😱", accent: "#f5d0fe", dull: "YOU WON'T BELIEVE", before: before4, after: after4 },
+  { title: "The Contrast Hook", niche: "Fitness", stat: "+280% CTR", hook: "Before/After Narrative", b1: "#14532d", b2: "#16a34a", text: "30 DAY BODY CHANGE", accent: "#dcfce7", dull: "MY FITNESS JOURNEY", before: before5, after: after5 },
+  { title: "Open Loop Mastery", niche: "Tech", stat: "1.8M Views", hook: "Open Loop + Mystery", b1: "#292524", b2: "#57534e", text: "THEY LIED ABOUT AI", accent: "#fef3c7", dull: "THE TRUTH ABOUT AI", before: before6, after: after6 },
 ];
 
 const FeaturedWork = () => {
@@ -912,7 +940,7 @@ const FeaturedWork = () => {
         {workData.map((w, i) => (
           <div key={w.title} style={{ position: "sticky", top: isMobile ? 68 + i * 10 : 72 + i * 18, zIndex: i + 1, marginBottom: i < workData.length - 1 ? 72 : 96 }}>
             <div style={{ background: theme.surface, border: `1px solid ${theme.line}`, borderRadius: 20, overflow: "hidden", boxShadow: "0 24px 60px rgba(0,0,0,0.68)" }}>
-              <Slider before={<DullThumb text={w.dull} />} after={<VividThumb bg1={w.b1} bg2={w.b2} text={w.text} accent={w.accent} />} />
+              <Slider before={<DullThumb text={w.dull} img={w.before} />} after={<VividThumb bg1={w.b1} bg2={w.b2} text={w.text} accent={w.accent} img={w.after} />} />
               <div style={{ padding: isMobile ? "18px 18px 20px" : "18px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 5 }}>{w.title}</div>
@@ -1333,21 +1361,21 @@ export default function App() {
             left: 0,
             right: 0,
             zIndex: 1000,
-            height: isMobile ? 66 : 84,
+            height: isMobile ? 66 : 68,
             padding: isMobile ? "0 20px" : "0 8%",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             gap: 16,
-            background: navScrolled ? "rgba(8,10,15,0.78)" : "rgba(8,10,15,0.15)",
-            backdropFilter: navScrolled ? "blur(18px)" : "blur(8px)",
+            background: navScrolled ? "rgba(8,10,15,0.70)" : "rgba(8,10,15,0.12)",
+            backdropFilter: navScrolled ? "blur(12px)" : "blur(6px)",
             borderBottom: navScrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid transparent",
             transition: "all 0.35s cubic-bezier(.22,.61,.36,1)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 10 : 13, flexShrink: 0 }}>
-            <Logo size={isMobile ? 34 : 42} />
-            <span style={{ fontWeight: 900, fontSize: isMobile ? 15 : 17, letterSpacing: 1.5, textTransform: "uppercase" }}>VisualDives</span>
+          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 10 : 9, flexShrink: 0 }}>
+            <Logo size={isMobile ? 34 : 38} />
+            <span style={{ fontWeight: 600, fontSize: isMobile ? 15 : 16, letterSpacing: 2.2, textTransform: "uppercase" }}>VisualDives</span>
           </div>
 
           {!isMobile ? (
