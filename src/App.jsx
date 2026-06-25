@@ -959,7 +959,7 @@ const Intro = () => {
    FEATURED WORK DATA
 ───────────────────────────── */
 const workData = [
-  { title: "From Invisible to Viral", niche: "Business Documentary", stat: "+18% CTR", hook: "Unknown Man + Famous Brand", b1: "#0f0c29", b2: "#302b63", text: "10 MONEY TIPS", accent: "#ffd700", dull: "10 MONEY TIPS", before: before1, after: after1 },
+  { title: "Unknown Man + Famous Brand", niche: "Business Documentary", stat: "+18% CTR", hook: "Unknown Man + Famous Brand", b1: "#0f0c29", b2: "#302b63", text: "10 MONEY TIPS", accent: "#ffd700", dull: "10 MONEY TIPS", before: before1, after: after1 },
   { title: "Exposing the Beggar Mafia", niche: "Documentary", stat: "1.7M Views", hook: "Belief Reversal + Shock", b1: "#7f1d1d", b2: "#dc2626", text: "MY COMEBACK STORY", accent: "#fef2f2", dull: "MY STORY", before: before2, after: after2 },
   { title: "Worst Flight Experience Ever", niche: "Travel / Vlog", stat: "50K→500K (+20% CTR)", hook: "Fear + Curiosity", b1: "#1e3a5f", b2: "#2563eb", text: "LEARN THIS NOW", accent: "#dbeafe", dull: "LEARN THIS", before: before3, after: after3 },
   { title: "Boost Immunity Naturally", niche: "Health", stat: "985K Views", hook: "Healthy Foods + Doctor", b1: "#4a044e", b2: "#9333ea", text: "YOU WON'T BELIEVE 😱", accent: "#f5d0fe", dull: "YOU WON'T BELIEVE", before: before4, after: after4 },
@@ -985,10 +985,10 @@ const FeaturedWork = () => {
           <div key={w.title} style={{ position: "sticky", top: isMobile ? 68 + i * 10 : 72 + i * 18, zIndex: i + 1, marginBottom: i < workData.length - 1 ? 72 : 96 }}>
             <div style={{ background: theme.surface, border: `1px solid ${theme.line}`, borderRadius: 20, overflow: "hidden", boxShadow: "0 24px 60px rgba(0,0,0,0.68)" }}>
               <Slider before={<DullThumb text={w.dull} img={w.before} />} after={<VividThumb bg1={w.b1} bg2={w.b2} text={w.text} accent={w.accent} img={w.after} />} />
-              <div style={{ padding: isMobile ? "18px 18px 20px" : "18px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-                <div>
-                  <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 5 }}>{w.title}</div>
-                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)" }}>
+              <div style={{ padding: isMobile ? "18px 18px 20px" : "18px 24px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 5, lineHeight: 1.3 }}>{w.title}</div>
+                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", whiteSpace: "nowrap" }}>
                     Hook: <span style={{ color: "#818cf8" }}>{w.hook}</span>
                   </div>
                 </div>
@@ -1262,15 +1262,15 @@ const Testimonials = () => {
           <div style={{ position: "absolute", left: 20, top: 0, bottom: 0, width: 1, background: "linear-gradient(to bottom,transparent,rgba(59,130,246,0.25),transparent)" }} />
           {testimonials.map((t, i) => (
             <div key={t.name} style={{ position: "sticky", top: isMobile ? 68 + i * 16 : 170 + i * 30, zIndex: i + 1, marginBottom: i < testimonials.length - 1 ? 72 : 0 }}>
-              <div style={{ background: "#0d1017", border: `1px solid ${theme.line}`, borderRadius: 20, padding: isMobile ? "30px 24px 30px 50px" : "36px 44px 36px 60px", boxShadow: "0 24px 60px rgba(0,0,0,0.65)", position: "relative" }}>
+              <div style={{ background: "#0d1017", border: `1px solid ${theme.line}`, borderRadius: 20, padding: isMobile ? "28px 24px 28px 48px" : "34px 44px 34px 56px", boxShadow: "0 24px 60px rgba(0,0,0,0.65)", position: "relative" }}>
                 <div style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", width: 9, height: 9, borderRadius: "50%", background: t.color, boxShadow: `0 0 16px ${t.color}` }} />
                 <div style={{ display: "flex", gap: 2, marginBottom: 16 }}>{Array(5).fill(0).map((_, j) => <span key={j} style={{ color: "#fbbf24", fontSize: 13 }}>★</span>)}</div>
-                <p style={{ fontSize: 17, color: "rgba(255,255,255,0.68)", lineHeight: 1.85, marginBottom: 26, fontStyle: "italic" }}>"{t.text}"</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: t.color, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 17 }}>{t.name[0]}</div>
-                  <div>
-                    <div style={{ fontWeight: 800, fontSize: 15 }}>{t.name}</div>
-                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.28)", marginTop: 3 }}>
+                <p style={{ fontSize: 16, color: "rgba(255,255,255,0.68)", lineHeight: 1.85, marginBottom: 24, fontStyle: "italic" }}>"{t.text}"</p>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: t.color, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 17, flexShrink: 0 }}>{t.name[0]}</div>
+                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <div style={{ fontWeight: 800, fontSize: 15, lineHeight: 1.2 }}>{t.name}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.28)", marginTop: 3, lineHeight: 1 }}>
                       {t.handle}{t.subs ? ` · ${t.subs}` : ""}
                     </div>
                   </div>
@@ -1348,22 +1348,92 @@ const CTA = () => {
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#3b82f6", animation: "pulse 2s infinite" }} />
           <span style={{ fontSize: 11, color: theme.accentText, fontWeight: 600, letterSpacing: 2.5, textTransform: "uppercase" }}>Now Taking Projects</span>
         </div>
-        <h2 style={{ fontSize: "clamp(44px, 7vw, 90px)", fontWeight: 900, lineHeight: 1.05, letterSpacing: "-3px", marginBottom: 20, paddingBottom: 4 }}>
+        <h2 style={{ fontSize: "clamp(44px, 7vw, 90px)", fontWeight: 900, lineHeight: 1.1, letterSpacing: "-3px", marginBottom: 20, paddingBottom: 8, overflow: "visible" }}>
           Want Better
           <br />
-          <span style={{ background: "linear-gradient(90deg,#3b82f6,#8b5cf6,#ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+          <span style={{ background: "linear-gradient(90deg,#3b82f6,#8b5cf6,#ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", display: "inline-block", paddingBottom: 6 }}>
             Thumbnails?
           </span>
         </h2>
         <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 17, marginBottom: 44 }}>Every click counts. Let's make yours.</p>
         <div style={{ position: "relative", zIndex: 2, display: "inline-block" }}>
-          <GhostButton href="mailto:sandeepxsahu@gmail.com">Work With Me →</GhostButton>
+          <GhostButton href={`mailto:sandeepxsahu@gmail.com?subject=${encodeURIComponent("Let's Work Together")}&body=${encodeURIComponent("Hi Sandeep,\n\nI found your portfolio and I'm interested in working together.\n\nHere's my channel:\n\nNiche:\n\nI'm looking for help with:\n\nLooking forward to hearing from you!\n\nBest,")}`}>Start Your Project →</GhostButton>
         </div>
         <div style={{ marginTop: 20, fontSize: 13, color: "rgba(255,255,255,0.32)" }}>
           Let's create something awesome.
         </div>
       </Reveal>
     </section>
+  );
+};
+
+/* ─────────────────────────────
+   EMAIL FOOTER WIDGET
+───────────────────────────── */
+const EmailFooter = () => {
+  const [copied, setCopied] = useState(false);
+  const email = "sandeepxsahu@gmail.com";
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    // Copy to clipboard
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(email).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+    } else {
+      // Fallback for older browsers / mobile
+      const el = document.createElement("textarea");
+      el.value = email;
+      el.style.position = "fixed";
+      el.style.opacity = "0";
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+    // Also open mail client after brief delay so copy runs first
+    setTimeout(() => {
+      window.location.href = `mailto:${email}`;
+    }, 120);
+  };
+
+  return (
+    <a
+      href={`mailto:${email}`}
+      onClick={handleClick}
+      title="Click to copy & open mail"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        color: copied ? "#3b82f6" : "rgba(255,255,255,0.45)",
+        fontSize: 13,
+        textDecoration: "none",
+        cursor: "pointer",
+        transition: "color 0.2s",
+        userSelect: "none",
+      }}
+      onMouseEnter={(e) => { if (!copied) e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
+      onMouseLeave={(e) => { if (!copied) e.currentTarget.style.color = "rgba(255,255,255,0.45)"; }}
+    >
+      <span style={{ fontSize: 13 }}>{copied ? "✓ Copied!" : email}</span>
+      <span style={{
+        fontSize: 10,
+        padding: "2px 7px",
+        borderRadius: 4,
+        background: copied ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.06)",
+        border: `1px solid ${copied ? "rgba(59,130,246,0.3)" : "rgba(255,255,255,0.08)"}`,
+        color: copied ? "#3b82f6" : "rgba(255,255,255,0.28)",
+        letterSpacing: 0.5,
+        transition: "all 0.2s",
+      }}>
+        {copied ? "copied" : "copy"}
+      </span>
+    </a>
   );
 };
 
@@ -1520,7 +1590,7 @@ export default function App() {
               ))}
             </div>
 
-            <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 13 }}>sandeepxsahu@gmail.com</div>
+            <EmailFooter />
           </div>
         </footer>
       </div>
